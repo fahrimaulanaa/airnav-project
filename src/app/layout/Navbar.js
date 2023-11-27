@@ -20,7 +20,7 @@ const Navbar = () => {
                     <div className='flex-shrink-0'>
                     <Link href='/'>
                         <Image 
-                            src='logo_airnav.jpg'
+                            src='/logo_airnav.jpg'
                             alt='AirNav Logo'
                             width={150}
                             height={100}
