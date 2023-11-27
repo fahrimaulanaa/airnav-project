@@ -26,7 +26,7 @@ const Profile = () => {
               <p>Teknisi Teknik</p>
             </div>
           </div>
-          <div className="sidebar-subtitle text-white pl-6 mt-12 py-2 flex items-center hover:bg-white hover:bg-opacity-20">
+          <div className="sidebar-subtitle text-white pl-6 mt-6 py-2 flex items-center hover:bg-white hover:bg-opacity-20">
             <Link className="flex" href="/profile">
               <Image
                 src="/ic_profile.png"
@@ -86,6 +86,17 @@ const Profile = () => {
               <p className="pt-1">Informasi Dokumen</p>
             </Link>
           </div>
+          <Link href="/">
+            <div className="sidebar-subtitle text-white pl-6 py-2 mt-12 flex items-center hover:bg-white hover:bg-opacity-20">
+                <Image
+                src="/logo_airnav.jpg"
+                alt="profile"
+                width={200}
+                height={60}
+                className="mr-4"
+                />
+            </div>
+          </Link>
         </div>
       </div>
       <div className="main-content flex">
