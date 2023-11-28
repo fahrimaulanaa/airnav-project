@@ -103,63 +103,57 @@ const Profile = () => {
       </div>
       <div className="main-content flex">
         {/* Formulir */}
-        <form className="form-container flex-col w-full">
+        <form className="form-container flex-col w-max">
           <div className="ml-12 mt-6 mb-6">
             <h1 className="text-black font-bold text-4xl">
-              Deskripsi Tugas dan Pekerjaan
+              Dokumen Pendukung
             </h1>
             <p className="text-red-500">*Pastikan mengisi data dengan benar</p>
           </div>
-            <div className="flex flex-col ml-12">
-                <div className="flex flex-col w-200">
-                <label htmlFor="jobdesc" className="text-hint-dark pb-1 font-semibold">
-                Jenis Kegiatan Yang Dilakukan di Bandara
-                </label>
-                <input
-                    className="border-2 border-gray-300 rounded-md p-2"
-                    id="jobdescription"
-                    name="jobdesc"
-                    type="text"
-                    placeholder="isi data disini"
-                ></input>
-                </div>
+          <div className="flex flex-row ml-12">
+            <div className="flex flex-col">
+                <h2 className="text-md font-semibold">E-KTP</h2>
+                <Image
+                src= "/placeholder_document.png"
+                alt="placeholder"
+                width={204}
+                height={275}
+                className="mr-4 mt-1"
+                />
             </div>
-            <div className="flex flex-col ml-12 mt-12">
-                <div className="flex flex-col w-200">
-                <label htmlFor="jobdesc" className="text-hint-dark pb-1 font-semibold">
-                Area Yang Dituju di Bandara
-                </label>
-                <input
-                    className="border-2 border-gray-300 rounded-md p-2"
-                    id="jobdesc"
-                    name="jobdesc"
-                    type="text"
-                    placeholder="isi data disini"
-                ></input>
-                </div>
+            <div className="flex flex-col ml-8">
+                <h2 className="text-md font-semibold">Kartu Pegawai (Depan)</h2>
+                <Image
+                src= "/placeholder_document.png"
+                alt="placeholder"
+                width={204}
+                height={275}
+                className="mr-4 mt-1"
+                />
             </div>
-            <div className="flex flex-col ml-12 mt-12">
-                <div className="flex flex-col w-200">
-                <label htmlFor="jobdesc" className="text-hint-dark pb-1 font-semibold">
-                Frekuensi Ke Bandara
-                </label>
-                <input
-                    className="border-2 border-gray-300 rounded-md p-2"
-                    id="jobdesc"
-                    name="jobdesc"
-                    type="text"
-                    placeholder="isi data disini"
-                ></input>
-                </div>
+            <div className="flex flex-col ml-8">
+                <h2 className="text-md font-semibold">Kartu Pegawai (Belakang)</h2>
+                <Image
+                src= "/placeholder_document.png"
+                alt="placeholder"
+                width={204}
+                height={275}
+                className="mr-4 mt-1"
+                />
             </div>
-            {/* button simpan data */}
-            <div className="flex flex-row ml-12 mt-12">
-                <button className="bg-airnav-blue text-white p-3 w-full rounded-md hover:bg-transparent hover:text-AirNav hover:border-AirNav hover:border transition duration-300 ease-in-out border">
-                Simpan Data
-                </button>
+            <div className="flex flex-col ml-8">
+                <h2 className="text-md font-semibold">Pass Photo</h2>
+                <Image
+                src= "/placeholder_document.png"
+                alt="placeholder"
+                width={204}
+                height={275}
+                className="mr-4 mt-1"
+                />
             </div>
+          </div>
+          <button className="bg-airnav-blue text-white border rounded-md w-96 ml-12 mt-8 p-3 hover:bg-transparent hover:text-AirNav hover:border hover:border-AirNav transition duration-300 ease-out">Simpan Data</button>
         </form>
-
         {/* Isi Konten Utama */}
         {/* ... */}
       </div>
