@@ -6,12 +6,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import mongoose from "mongoose";
 import { Schema } from "mongoose";
+import Navbarx from "../layout/Navbarx";
 
 // Komponen Profile
 const Profile = () => {
   const router = useRouter();
 
   return (
+    <main>
+        <Navbarx/>
     <div className="flex">
       <div className="sidebar flex flex-col bg-airnav-dark w-64 h-screen">
         <div className="sidebar-header">
@@ -164,6 +167,7 @@ const Profile = () => {
         {/* ... */}
       </div>
     </div>
+    </main>
   );
 };
 

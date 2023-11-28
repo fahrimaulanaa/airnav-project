@@ -2,16 +2,15 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import mongoose from "mongoose";
-import { Schema } from "mongoose";
+import Navbarx from "../layout/Navbarx";
 
 // Komponen Profile
 const Profile = () => {
-  const router = useRouter();
 
   return (
+    <main>
+      <Navbarx />
     <div className="flex">
       <div className="sidebar flex flex-col bg-airnav-dark w-64 h-screen">
         <div className="sidebar-header">
@@ -21,8 +20,7 @@ const Profile = () => {
               alt="profile"
               width={60}
               height={60}
-              className="rounded-circle"
-            />
+              className="rounded-circle" />
             <div className="sidebar-profile-name text-white ml-4 mt-2">
               <p className="text-lg font-semibold">Fahri Maulana</p>
               <p>Teknisi Teknik</p>
@@ -35,8 +33,7 @@ const Profile = () => {
                 alt="profile"
                 width={30}
                 height={30}
-                className="mr-4"
-              />
+                className="mr-4" />
               <p className="pt-1">Data Pribadi</p>
             </Link>
           </div>
@@ -47,8 +44,7 @@ const Profile = () => {
                 alt="profile"
                 width={30}
                 height={30}
-                className="mr-4"
-              />
+                className="mr-4" />
               <p className="pt-1">Informasi Keluarga</p>
             </Link>
           </div>
@@ -59,8 +55,7 @@ const Profile = () => {
                 alt="profile"
                 width={30}
                 height={30}
-                className="mr-4"
-              />
+                className="mr-4" />
               <p className="pt-1">Informasi Pendidikan</p>
             </Link>
           </div>
@@ -71,8 +66,7 @@ const Profile = () => {
                 alt="profile"
                 width={30}
                 height={30}
-                className="mr-4"
-              />
+                className="mr-4" />
               <p className="pt-1">Informasi Pekerjaan</p>
             </Link>
           </div>
@@ -83,8 +77,7 @@ const Profile = () => {
                 alt="profile"
                 width={30}
                 height={30}
-                className="mr-4"
-              />
+                className="mr-4" />
               <p className="pt-1">Informasi Dokumen</p>
             </Link>
           </div>
@@ -95,8 +88,7 @@ const Profile = () => {
                 alt="profile"
                 width={200}
                 height={60}
-                className="mr-4"
-              />
+                className="mr-4" />
             </div>
           </Link>
         </div>
@@ -112,52 +104,51 @@ const Profile = () => {
           </div>
           <div className="flex flex-row ml-12">
             <div className="flex flex-col">
-                <h2 className="text-md font-semibold">E-KTP</h2>
-                <Image
-                src= "/placeholder_document.png"
+              <h2 className="text-md font-semibold">E-KTP</h2>
+              <Image
+                src="/placeholder_document.png"
                 alt="placeholder"
                 width={204}
                 height={275}
-                className="mr-4 mt-1"
-                />
+                className="mr-4 mt-1" />
             </div>
             <div className="flex flex-col ml-8">
-                <h2 className="text-md font-semibold">Kartu Pegawai (Depan)</h2>
-                <Image
-                src= "/placeholder_document.png"
+              <h2 className="text-md font-semibold">Kartu Pegawai (Depan)</h2>
+              <Image
+                src="/placeholder_document.png"
                 alt="placeholder"
                 width={204}
                 height={275}
-                className="mr-4 mt-1"
-                />
+                className="mr-4 mt-1" />
             </div>
             <div className="flex flex-col ml-8">
-                <h2 className="text-md font-semibold">Kartu Pegawai (Belakang)</h2>
-                <Image
-                src= "/placeholder_document.png"
+              <h2 className="text-md font-semibold">Kartu Pegawai (Belakang)</h2>
+              <Image
+                src="/placeholder_document.png"
                 alt="placeholder"
                 width={204}
                 height={275}
-                className="mr-4 mt-1"
-                />
+                className="mr-4 mt-1" />
             </div>
             <div className="flex flex-col ml-8">
-                <h2 className="text-md font-semibold">Pass Photo</h2>
-                <Image
-                src= "/placeholder_document.png"
+              <h2 className="text-md font-semibold">Pass Photo</h2>
+              <Image
+                src="/placeholder_document.png"
                 alt="placeholder"
                 width={204}
                 height={275}
-                className="mr-4 mt-1"
-                />
+                className="mr-4 mt-1" />
             </div>
           </div>
-          <button className="bg-airnav-blue text-white border rounded-md w-96 ml-12 mt-8 p-3 hover:bg-transparent hover:text-AirNav hover:border hover:border-AirNav transition duration-300 ease-out">Simpan Data</button>
+          <button className="bg-airnav-blue text-white border rounded-md w-96 ml-12 mt-8 p-3 hover:bg-transparent hover:text-AirNav hover:border hover:border-AirNav transition duration-300 ease-out">
+            Simpan Data
+          </button>
         </form>
         {/* Isi Konten Utama */}
         {/* ... */}
       </div>
     </div>
+    </main>
   );
 };
 
