@@ -112,7 +112,7 @@ const Profile = () => {
               <p className="pt-1">Informasi Dokumen</p>
             </Link>
           </div>
-          <Link href="/PreviewPrint">
+          <Link href="/">
             <div className="rounded-md pl-6 mt-12 flex bg-white p-2 w-48 ml-6">
               <Image
               src="/ic_printer.png"
