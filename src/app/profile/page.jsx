@@ -10,10 +10,22 @@ import { collection, addDoc } from "firebase/firestore";
 
 //async function addData() {
 
-async function addData(name){
+async function addData(name, phone, birthPlace, birthDate, instance, position, workStatus, address, workPeriod, identityNumber, employeeNumber, previousWorkplace, religion){
   try {
     const docRef = await addDoc(collection(db, "users"), {
       name: name,
+      phone: phone,
+      birthPlace: birthPlace,
+      birthDate: birthDate,
+      instance: instance,
+      position: position,
+      workStatus: workStatus,
+      address: address,
+      workPeriod: workPeriod,
+      identityNumber: identityNumber,
+      employeeNumber: employeeNumber,
+      previousWorkplace: previousWorkplace,
+      religion: religion,
     });
     console.log("Document written with ID: ", docRef.id);
     return true;
@@ -26,12 +38,36 @@ async function addData(name){
 export default function Profile(){
 
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [birthPlace, setBirthPlace] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [instance, setInstance] = useState("");
+  const [position, setPosition] = useState("");
+  const [workStatus, setWorkStatus] = useState("");
+  const [address, setAddress] = useState("");
+  const [workPeriod, setWorkPeriod] = useState("");
+  const [identityNumber, setIdentityNumber] = useState("");
+  const [employeeNumber, setEmployeeNumber] = useState("");
+  const [previousWorkplace, setPreviousWorkplace] = useState("");
+  const [religion, setReligion] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const added = await addData(name);
+    const added = await addData(name, phone, birthPlace, birthDate, instance, position, workStatus, address, workPeriod, identityNumber, employeeNumber, previousWorkplace, religion);
     if(added){
       setName("");
+      setPhone("");
+      setBirthPlace("");
+      setBirthDate("");
+      setInstance("");
+      setPosition("");
+      setWorkStatus("");
+      setAddress("");
+      setWorkPeriod("");
+      setIdentityNumber("");
+      setEmployeeNumber("");
+      setPreviousWorkplace("");
+      setReligion("");
       alert("Data berhasil ditambahkan");
     }
   }
@@ -161,6 +197,10 @@ export default function Profile(){
                 type="number"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi nomor telefon disini"
+                id="phone"
+                name="phonenumber"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </div>
           </div>
@@ -173,6 +213,10 @@ export default function Profile(){
                 type="text"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi tempat lahir disini"
+                id="birthPlace"
+                name="birthPlace"
+                value={birthPlace}
+                onChange={(e) => setBirthPlace(e.target.value)}
               />
             </div>
             <div className="flex flex-col ml-12">
@@ -183,6 +227,10 @@ export default function Profile(){
                 type="text"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi nama instansi disini"
+                id="instance"
+                name="Instance"
+                value={instance}
+                onChange={(e) => setInstance(e.target.value)}
               />
             </div>
           </div>
@@ -195,6 +243,10 @@ export default function Profile(){
                 type="date"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi tanggal lahir disini"
+                id="birthdate"
+                name="birthdate"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
               />
             </div>
             <div className="flex flex-col ml-12">
@@ -203,6 +255,10 @@ export default function Profile(){
                 type="text"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi jabatan disini"
+                id="position"
+                name="Position"
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
               />
             </div>
           </div>
@@ -215,6 +271,10 @@ export default function Profile(){
                 type="text"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi status pekerjaan disini"
+                id="workstatus"
+                name="workStatus"
+                value={workStatus}
+                onChange={(e) => setWorkStatus(e.target.value)}
               />
             </div>
             <div className="flex flex-col ml-12">
@@ -223,6 +283,10 @@ export default function Profile(){
                 type="text"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi alamat disini"
+                id="address"
+                name="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
               />
             </div>
           </div>
@@ -234,6 +298,10 @@ export default function Profile(){
                 type="text"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi masa kerja disini"
+                id="workperiod"
+                name="workPeriod"
+                value={workPeriod}
+                onChange={(e) => setWorkPeriod(e.target.value)}
               />
             </div>
             {/* Nomor Identitas */}
@@ -245,6 +313,10 @@ export default function Profile(){
                 type="number"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi nomor identitas disini"
+                id="identitynumber"
+                name="identityNumber"
+                value={identityNumber}
+                onChange={(e) => setIdentityNumber(e.target.value)}
               />
             </div>
           </div>
@@ -258,6 +330,10 @@ export default function Profile(){
                 type="number"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi nomor induk pegawai disini"
+                id="employeenumber"
+                name="employeeNumber"
+                value={employeeNumber}
+                onChange={(e) => setEmployeeNumber(e.target.value)}
               />
             </div>
             {/* Tempat Bekerja Sebelumnya (opsional) */}
@@ -269,6 +345,10 @@ export default function Profile(){
                 type="text"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
                 placeholder="Isi tempat bekerja sebelumnya disini"
+                id="previousworkplace"
+                name="previousWorkplace"
+                value={previousWorkplace}
+                onChange={(e) => setPreviousWorkplace(e.target.value)}
               />
               </div>
             </div>
@@ -280,6 +360,10 @@ export default function Profile(){
                   type="text"
                   className="border border-gray-300 rounded-md px-4 py-2 w-96"
                   placeholder="Isi agama disini"
+                  id="religion"
+                  name="religion"
+                  value={religion}
+                  onChange={(e) => setReligion(e.target.value)}
                 />
               </div>
               {/* button simpan */}
