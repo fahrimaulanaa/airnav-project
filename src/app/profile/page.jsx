@@ -1,41 +1,39 @@
 // Import yang diperlukan
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbarx from "../layout/Navbarx";
+import { db } from "../firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
 
-//firebase
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+//async function addData() {
 
-// Komponen Profile
-const Profile = () => {
-
-  // firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyD2wXp9RZy9tYI3Ef5P-9vRWsSkg2XCd90",
-    authDomain: "airnavjogpassform.firebaseapp.com",
-    projectId: "airnavjogpassform",
-    storageBucket: "airnavjogpassform.appspot.com",
-    messagingSenderId: "472702397157",
-    appId: "1:472702397157:web:b977e138c5c5e9c2e5420c",
-    measurementId: "G-1N6TH4QKFK"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const firestore = getFirestore(app);
-
-  function submitProfile() {
-    const docRef = setDoc(doc(firestore, "users", "alovelace"), {
-      first: "Ada",
-      last: "Lovelace",
-      born: 1815
+async function addData(name){
+  try {
+    const docRef = await addDoc(collection(db, "users"), {
+      name: name,
     });
+    console.log("Document written with ID: ", docRef.id);
+    return true;
+  } catch (error) {
+    console.error("Error adding document: ", error);
+    return false;
+  }
+}
+
+export default function Profile(){
+
+  const [name, setName] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const added = await addData(name);
+    if(added){
+      setName("");
+      alert("Data berhasil ditambahkan");
+    }
   }
 
   return (
@@ -133,7 +131,7 @@ const Profile = () => {
       </div>
       <div className="main-content flex">
         {/* Formulir */}
-        <form className="form-container flex-col">
+        <form className="form-container flex-col" onSubmit={handleSubmit}>
           <div className="ml-12 mt-6 mb-6">
             <h1 className="text-black font-bold text-4xl">
               Data Pribadi Karyawan
@@ -147,8 +145,12 @@ const Profile = () => {
               </label>
               <input
                 type="text"
+                id="name"
                 className="border border-gray-300 rounded-md px-4 py-2 w-96"
+                name="fullname"
                 placeholder="Isi nama disini"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="flex flex-col ml-12">
@@ -283,7 +285,9 @@ const Profile = () => {
               {/* button simpan */}
               <div className="flex flex-col ml-12">
                 <label className="text-white font-semibold">Simpan</label>
-                <button onClick={submitProfile} className="bg-airnav-blue px-4 py-2 w-96 rounded-md text-white hover:text-AirNav hover:bg-transparent hover:border-[#005CA1] hover:border transition duration-300">
+                <button 
+                type="submit"
+                className="bg-airnav-blue px-4 py-2 w-96 rounded-md text-white hover:text-AirNav hover:bg-transparent hover:border-[#005CA1] hover:border transition duration-300">
                   Simpan Data
                 </button>
                 </div>
@@ -297,8 +301,6 @@ const Profile = () => {
     </main>
   );
 };
-
-export default Profile;
 
 // CSS untuk styling
 <style jsx>{`
