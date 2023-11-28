@@ -6,10 +6,37 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbarx from "../layout/Navbarx";
 
+//firebase
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
+
 // Komponen Profile
 const Profile = () => {
-  const router = useRouter();
 
+  // firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyD2wXp9RZy9tYI3Ef5P-9vRWsSkg2XCd90",
+    authDomain: "airnavjogpassform.firebaseapp.com",
+    projectId: "airnavjogpassform",
+    storageBucket: "airnavjogpassform.appspot.com",
+    messagingSenderId: "472702397157",
+    appId: "1:472702397157:web:b977e138c5c5e9c2e5420c",
+    measurementId: "G-1N6TH4QKFK"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const firestore = getFirestore(app);
+
+  function submitProfile() {
+    const docRef = setDoc(doc(firestore, "users", "alovelace"), {
+      first: "Ada",
+      last: "Lovelace",
+      born: 1815
+    });
+  }
 
   return (
     <main>
@@ -31,7 +58,7 @@ const Profile = () => {
             </div>
           </div>
           <div className="sidebar-subtitle text-white pl-6 mt-6 py-2 flex items-center hover:bg-white hover:bg-opacity-20">
-            <Link className="flex" href="/">
+            <Link className="flex" href="/profile">
               <Image
                 src="/ic_profile.png"
                 alt="profile"
@@ -256,7 +283,7 @@ const Profile = () => {
               {/* button simpan */}
               <div className="flex flex-col ml-12">
                 <label className="text-white font-semibold">Simpan</label>
-                <button className="bg-airnav-blue px-4 py-2 w-96 rounded-md text-white hover:text-AirNav hover:bg-transparent hover:border-[#005CA1] hover:border transition duration-300">
+                <button onClick={submitProfile} className="bg-airnav-blue px-4 py-2 w-96 rounded-md text-white hover:text-AirNav hover:bg-transparent hover:border-[#005CA1] hover:border transition duration-300">
                   Simpan Data
                 </button>
                 </div>
