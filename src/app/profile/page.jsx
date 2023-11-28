@@ -4,8 +4,6 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import mongoose from "mongoose";
-import { Schema } from "mongoose";
 import Navbarx from "../layout/Navbarx";
 
 // Komponen Profile
