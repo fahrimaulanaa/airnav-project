@@ -53,7 +53,7 @@ const Profile = () => {
             </div>
           </div>
           <div className="sidebar-subtitle text-white pl-6 mt-6 py-2 flex items-center hover:bg-white hover:bg-opacity-20">
-            <Link className="flex" href="/profile">
+            <Link className="flex" href="/">
               <Image
                 src="/ic_profile.png"
                 alt="profile"
