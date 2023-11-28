@@ -6,6 +6,28 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbarx from "../layout/Navbarx";
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyD2wXp9RZy9tYI3Ef5P-9vRWsSkg2XCd90",
+  authDomain: "airnavjogpassform.firebaseapp.com",
+  projectId: "airnavjogpassform",
+  storageBucket: "airnavjogpassform.appspot.com",
+  messagingSenderId: "472702397157",
+  appId: "1:472702397157:web:b977e138c5c5e9c2e5420c",
+  measurementId: "G-1N6TH4QKFK"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
 // Komponen Profile
 const Profile = () => {
   const router = useRouter();
@@ -90,15 +112,16 @@ const Profile = () => {
               <p className="pt-1">Informasi Dokumen</p>
             </Link>
           </div>
-          <Link href="/">
-            <div className="sidebar-subtitle text-white pl-6 py-2 mt-12 flex items-center hover:bg-white hover:bg-opacity-20">
-                <Image
-                src="/logo_airnav.jpg"
-                alt="profile"
-                width={200}
-                height={60}
-                className="mr-4"
-                />
+          <Link href="/PreviewPrint">
+            <div className="rounded-md pl-6 mt-12 flex bg-white p-2 w-48 ml-6">
+              <Image
+              src="/ic_printer.png"
+              alt="printer logo"
+              width={20}
+              height={20}
+              className="mr-4"
+              />
+              <p className="pt-1">Cetak Dokumen</p> 
             </div>
           </Link>
         </div>
