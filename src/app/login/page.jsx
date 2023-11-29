@@ -8,28 +8,24 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { collection, addDoc, updateDoc, setDoc, doc } from "firebase/firestore";
 
 export default function Login() {
+
   function googleLogin() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
+    //if media query is mobile then don't use popup
     signInWithPopup(auth, provider)
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
-        // The signed-in user info.
         const user = result.user;
-        localStorage.setItem("user", JSON.stringify(user));
-
         storeUserInfoToFirestore(user);
+        window.location.href = "/";
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
+        const email = error.email;
         const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
       });
   }
 
