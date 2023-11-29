@@ -50,7 +50,7 @@ const Navbar = () => {
                                 Masuk
                             </button>
                         </Link>
-                        <Link href='/'>
+                        <Link href='/register'>
                             <button className='bg-none text-[#343842] border border-[#343842] py-2 px-6 rounded-md'>
                                 Daftar
                             </button>
@@ -111,7 +111,7 @@ const Navbar = () => {
                             Masuk
                         </button>
                     </Link>
-                    <Link href='/'>
+                    <Link href='/register'>
                         <button className='bg-none text-[#343842] border border-[#343842] py-2 px-6 rounded-md'>
                             Daftar
                         </button>

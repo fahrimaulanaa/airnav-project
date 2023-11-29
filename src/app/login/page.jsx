@@ -60,11 +60,11 @@ export default function Login() {
             opacity: "0.9",
           }}
         >
-          <h2 className="text-4xl font-bold text-airnav-blue pt-4">
+          <h2 className="lg:text-4xl md:text-3xl sm:text-2xl font-bold text-airnav-blue pt-4">
             Masuk ke Platform
           </h2>
           <button
-            className="bg-white p-3 mt-6 mr-12 ml-12  text-black font-medium w-full rounded-full"
+            className="bg-white p-3 mt-6 mr-12 ml-12 text-black font-medium w-full rounded-full lg:text-base sm:text-sm"
             type="button"
             onClick={googleLogin}
           >
