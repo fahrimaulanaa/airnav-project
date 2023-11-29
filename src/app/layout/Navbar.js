@@ -106,7 +106,7 @@ const Navbar = () => {
                     <Link href='/document'>
                         <span className='text-[#343842] block p-2 hover:text-white hover:bg-[#343842] rounded-lg transition duration-250 mb-6'>Dokumen Pendukung</span>
                     </Link>
-                    <Link href='/'>
+                    <Link href='/login'>
                         <button className='bg-[#343842] text-white py-2 px-6 rounded-md mr-6'>
                             Masuk
                         </button>
