@@ -10,6 +10,7 @@ module.exports = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'airnav-bg': "url('/bg_airnav_2.jpg')",
+        'airnav-bgy': "url('/bg_tower.png')",
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },

@@ -45,7 +45,7 @@ const Navbar = () => {
                         <Link href='/document'>
                             <span className='text-[#343842] hover:text-white hover:bg-[#343842] hover:py-4 hover:px-6 hover:rounded-md transition duration-500 ease-in-out'>Dokumen Pendukung</span>
                         </Link>
-                        <Link href='/'>
+                        <Link href='/login'>
                             <button className='bg-[#343842] text-white py-2 px-6 rounded-md'>
                                 Masuk
                             </button>
