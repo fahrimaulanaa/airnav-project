@@ -6,9 +6,8 @@ import { auth } from "../firebaseConfig";
 import { db } from "../firebaseConfig";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { collection, addDoc, updateDoc, setDoc, doc, getDoc } from "firebase/firestore";
+export default function Register() {
 
-export default function Login() {
-    
   function googleLogin() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
@@ -28,7 +27,6 @@ export default function Login() {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-
       });
   }
 
@@ -43,24 +41,22 @@ export default function Login() {
         uid: user.uid,
         lastSignInTime: user.metadata.lastSignInTime,
         creationTime: user.metadata.creationTime,
-        providerId: user.providerData[0].providerId
+        providerId: user.providerData[0].providerId,
       });
-
-    }else{
-        //jika user sudah ada di firestore, maka update
-        await updateDoc(userDocRef, {
-            email: user.email,
-            name: user.displayName,
-            photoURL: user.photoURL,
-            uid: user.uid,
-            lastSignInTime: user.metadata.lastSignInTime,
-            creationTime: user.metadata.creationTime,
-            providerId: user.providerData[0].providerId
-        });
-        window.location.href = "/profile";
+    } else {
+      //jika user sudah ada di firestore, maka update
+      await updateDoc(userDocRef, {
+        email: user.email,
+        name: user.displayName,
+        photoURL: user.photoURL,
+        uid: user.uid,
+        lastSignInTime: user.metadata.lastSignInTime,
+        creationTime: user.metadata.creationTime,
+        providerId: user.providerData[0].providerId,
+      });
+      window.location.href = "/profile";
     }
   }
-
 
   return (
     <main>
@@ -77,7 +73,7 @@ export default function Login() {
           }}
         >
           <h2 className="lg:text-4xl md:text-3xl sm:text-2xl text-2xl font-bold text-airnav-blue pt-4">
-            Masuk ke Platform
+            Daftar ke Platform
           </h2>
           <button
             className="bg-white p-3 mt-6 mr-12 ml-12 text-black font-medium w-full rounded-full lg:text-base text-sm sm:text-sm"
@@ -91,11 +87,11 @@ export default function Login() {
                 width={35}
                 height={35}
               />
-              <span className="ml-2">Masuk dengan Google</span>
+              <span className="ml-2">Daftar dengan Google</span>
             </div>
           </button>
           <Image
-            src="/ic_Separator.png"
+            src="/ic_daftarSepataror.png"
             alt="Separator"
             width={500}
             height={30}
@@ -140,20 +136,18 @@ export default function Login() {
               <div className="w-full px-12">
                 <button
                   className="bg-airnav-blue p-4 text-white font-medium w-full rounded-full"
-                  type="button"
-                >
-                  Masuk ke Platform
+                  type="button">
+                  Daftar ke Platform
                 </button>
               </div>
             </div>
           </form>
           <div className="flex items-center justify-center px-12">
-            <p className="text-black mr-3">Belum punya akun? </p>
+            <p className="text-black mr-3">Sudah punya akun? </p>
             <a
-              href="/register"
-              className="text-blue-900 text-lg font-semibold underline"
-            >
-              Daftar Sekarang
+              href="/login"
+              className="text-blue-900 text-lg font-semibold underline">
+              Masuk Sekarang
             </a>
           </div>
         </div>
