@@ -60,7 +60,7 @@ export default function Login() {
             opacity: "0.9",
           }}
         >
-          <h2 className="lg:text-4xl md:text-3xl sm:text-2xl font-bold text-airnav-blue pt-4">
+          <h2 className="lg:text-4xl md:text-3xl sm:text-2xl text-2xl font-bold text-airnav-blue pt-4">
             Masuk ke Platform
           </h2>
           <button
