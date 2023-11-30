@@ -5,7 +5,6 @@ import React from "react";
 import { auth } from "../firebaseConfig";
 import { db } from "../firebaseConfig";
 import { useHistory } from "react-router-dom";
-
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { collection, addDoc, updateDoc, setDoc, doc, getDoc } from "firebase/firestore";
 
@@ -26,10 +25,7 @@ export default function Login() {
         document.cookie = "loginStatus=true;max-age=86400;path=/";
         storeUserInfoToFirestore(user);
 
-        // Redirect to /profile
-        const history = useHistory();
-        console.log(history);
-        history.push("/profile");
+        window.location.href = "/profile";
       })
       .catch((error) => {
         // Handle Errors here.
