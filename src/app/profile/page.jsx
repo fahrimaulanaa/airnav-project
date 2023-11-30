@@ -107,28 +107,31 @@ export default function Profile(){
       setReligion(data.religion);
     }
   
-    // Update state in real-time
-    const unsubscribe = onSnapshot(userDocRef, (doc) => {
-      if (doc.exists()) {
-        const data = doc.data();
-        setName(data.name);
-        setPhone(data.phone);
-        setBirthPlace(data.birthPlace);
-        setInstance(data.instance);
-        setBirthDate(data.birthDate);
-        setPosition(data.position);
-        setWorkStatus(data.workStatus);
-        setAddress(data.address);
-        setWorkPeriod(data.workPeriod);
-        setIdentityNumber(data.identityNumber);
-        setEmployeeNumber(data.employeeNumber);
-        setPreviousWorkplace(data.previousWorkplace);
-        setReligion(data.religion);
-      }
-    });
+    // Check if window is defined (client-side) before running client-side code
+    if (typeof window !== "undefined") {
+      // Update state in real-time
+      const unsubscribe = onSnapshot(userDocRef, (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          setName(data.name);
+          setPhone(data.phone);
+          setBirthPlace(data.birthPlace);
+          setInstance(data.instance);
+          setBirthDate(data.birthDate);
+          setPosition(data.position);
+          setWorkStatus(data.workStatus);
+          setAddress(data.address);
+          setWorkPeriod(data.workPeriod);
+          setIdentityNumber(data.identityNumber);
+          setEmployeeNumber(data.employeeNumber);
+          setPreviousWorkplace(data.previousWorkplace);
+          setReligion(data.religion);
+        }
+      });
   
-    // Return the unsubscribe function to use it when needed (e.g., on component unmount)
-    return unsubscribe;
+      // Return the unsubscribe function to use it when needed (e.g., on component unmount)
+      return unsubscribe;
+    }
   }
   
   // Call the function in a useEffect to ensure it runs after the initial render
