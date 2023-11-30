@@ -36,7 +36,7 @@ function checkLogin() {
     const loginStatusCookie = cookieArray.find(cookie => cookie.trim().startsWith("loginStatus"));
     
     if (loginStatusCookie) {
-      const loginStatus = loginStatusCookie.split("=")[1].trim();
+      const loginStatus = loginStatusCookie.split("")[1].trim();
       if (loginStatus !== "true") {
         window.location.href = "/login";
       }
