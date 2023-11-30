@@ -9,7 +9,6 @@ import { db } from "../firebaseConfig";
 import { collection, addDoc, updateDoc, setDoc, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { Cookie } from "next/font/google";
-import {useHistory} from "react-router-dom";
 
 
 export default function Profile(){
