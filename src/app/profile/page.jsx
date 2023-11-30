@@ -51,8 +51,6 @@ if (typeof window !== 'undefined') {
     userUid = userObj.uid;
   } else {
     // Handle the case where user data is not available in localStorage
-    // Redirect to login or handle appropriately
-    window.location.href = "/login";
   }
 }
 
