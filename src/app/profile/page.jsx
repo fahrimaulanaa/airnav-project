@@ -33,23 +33,34 @@ function checkLogin() {
   if (typeof window !== 'undefined') {
     const cookie = document.cookie;
     const cookieArray = cookie.split(";");
-    const loginStatus = cookieArray[0].split("=")[1];
-    if (loginStatus !== "true") {
+    const loginStatusCookie = cookieArray.find(cookie => cookie.trim().startsWith("loginStatus="));
+    
+    if (loginStatusCookie) {
+      const loginStatus = loginStatusCookie.split("=")[1].trim();
+      if (loginStatus !== "true") {
+        window.location.href = "/login";
+      }
+    } else {
       window.location.href = "/login";
-    }
-  }
+    }    
 }
 
 checkLogin();
 
   // user handler
 let userUid;
-
 if (typeof window !== 'undefined') {
   const user = localStorage.getItem("user");
-  const userObj = JSON.parse(user);
-  userUid = userObj.uid;
+  if (user) {
+    const userObj = JSON.parse(user);
+    userUid = userObj.uid;
+  } else {
+    // Handle the case where user data is not available in localStorage
+    // Redirect to login or handle appropriately
+    window.location.href = "/login";
+  }
 }
+
 
 async function getInputValueFromFirebase() {
   if (userUid) {
