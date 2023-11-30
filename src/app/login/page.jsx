@@ -5,6 +5,7 @@ import React from "react";
 import { auth } from "../firebaseConfig";
 import { db } from "../firebaseConfig";
 import { useHistory } from "react-router-dom";
+import { useEffect } from "react";
 import { getAuth, signInWithPopup, GoogleAuthProvider, } from "firebase/auth";
 import { collection, addDoc, updateDoc, setDoc, doc, getDoc } from "firebase/firestore";
 
