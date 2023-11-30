@@ -1,13 +1,192 @@
 // Import yang diperlukan
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbarx from "../layout/Navbarx";
+import { db } from "../firebaseConfig";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  setDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { Cookie } from "next/font/google";
 
 // Komponen Profile
-const Profile = () => {
+export default function Profile() {
+
+  // State untuk menyimpan data
+  const [sdName, setSdName] = React.useState("");
+  const [sdLocation, setSdLocation] = React.useState("");
+  const [sdGradYear, setSdGradYear] = React.useState("");
+
+  const [smpName, setSmpName] = React.useState("");
+  const [smpLocation, setSmpLocation] = React.useState("");
+  const [smpGradYear, setSmpGradYear] = React.useState("");
+
+  const [smaName, setSmaName] = React.useState("");
+  const [smaLocation, setSmaLocation] = React.useState("");
+  const [smaGradYear, setSmaGradYear] = React.useState("");
+
+  const [ptName, setPtName] = React.useState("");
+  const [ptLocation, setPtLocation] = React.useState("");
+  const [ptGradYear, setPtGradYear] = React.useState("");
+
+  //function check if user is logged in
+  function checkLogin() {
+    // Check if window is defined (client-side) before accessing document or window
+    if (typeof window !== "undefined") {
+      const loginStatus = localStorage.getItem("loginStatus");
+      if (loginStatus != "true") {
+        window.location.href = "/login";
+      } else {
+      }
+    }
+  }
+  checkLogin();
+
+    // user handler
+    let userUid;
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("userData");
+      if (user) {
+        const userObj = JSON.parse(user);
+        userUid = userObj.uid;
+      } else {
+        // Handle the case where user data is not available in localStorage
+      }
+    }
+
+  //handle submit
+  async function handleSubmit(e) {
+    const sdData = {
+      sdName: sdName,
+      sdLocation: sdLocation,
+      sdGradYear: sdGradYear,
+    };
+    e.preventDefault();
+    const userDocRef = doc(collection(db, "users"), userUid);
+    const docSnap = await getDoc(userDocRef);
+    //make array of education
+    const education = [
+      {
+        sdName: sdName,
+        sdLocation: sdLocation,
+        sdGradYear: sdGradYear,
+        smpName: smpName,
+        smpLocation: smpLocation,
+        smpGradYear: smpGradYear,
+        smaName: smaName,
+        smaLocation: smaLocation,
+        smaGradYear: smaGradYear,
+        ptName: ptName,
+        ptLocation: ptLocation,
+        ptGradYear: ptGradYear,
+      },
+    ];
+    if (docSnap.exists()) {
+      await updateDoc(userDocRef, {
+        education: education,
+      });
+    } else {
+      await setDoc(userDocRef, {
+        education: education,
+      });
+    }
+  }
+
+  async function getInputValueFromFirebase() {
+    if(userUid){
+      const docRef = doc(db, "users", userUid);
+      const docSnap = await getDoc(docRef);
+      if(docSnap.exists){
+        const data = docSnap.data();
+        const education = data.education;
+        const sdName = education[0].sdName;
+        const sdLocation = education[0].sdLocation;
+        const sdGradYear = education[0].sdGradYear;
+        const smpName = education[0].smpName;
+        const smpLocation = education[0].smpLocation;
+        const smpGradYear = education[0].smpGradYear;
+        const smaName = education[0].smaName;
+        const smaLocation = education[0].smaLocation;
+        const smaGradYear = education[0].smaGradYear;
+        const ptName = education[0].ptName;
+        const ptLocation = education[0].ptLocation;
+        const ptGradYear = education[0].ptGradYear;
+        setSdName(sdName);
+        setSdLocation(sdLocation);
+        setSdGradYear(sdGradYear);
+        setSmpName(smpName);
+        setSmpLocation(smpLocation);
+        setSmpGradYear(smpGradYear);
+        setSmaName(smaName);
+        setSmaLocation(smaLocation);
+        setSmaGradYear(smaGradYear);
+        setPtName(ptName);
+        setPtLocation(ptLocation);
+        setPtGradYear(ptGradYear);
+      }
+      if(typeof window !== "undefined"){
+        const unsubscribe = onSnapshot(doc(db, "users", userUid), (doc) => {
+          if(doc.exists()){
+            const data = doc.data();
+            const education = data.education;
+            const sdName = education[0].sdName;
+            const sdLocation = education[0].sdLocation;
+            const sdGradYear = education[0].sdGradYear;
+            const smpName = education[0].smpName;
+            const smpLocation = education[0].smpLocation;
+            const smpGradYear = education[0].smpGradYear;
+            const smaName = education[0].smaName;
+            const smaLocation = education[0].smaLocation;
+            const smaGradYear = education[0].smaGradYear;
+            const ptName = education[0].ptName;
+            const ptLocation = education[0].ptLocation;
+            const ptGradYear = education[0].ptGradYear;
+            setSdName(sdName);
+            setSdLocation(sdLocation);
+            setSdGradYear(sdGradYear);
+            setSmpName(smpName);
+            setSmpLocation(smpLocation);
+            setSmpGradYear(smpGradYear);
+            setSmaName(smaName);
+            setSmaLocation(smaLocation);
+            setSmaGradYear(smaGradYear);
+            setPtName(ptName);
+            setPtLocation(ptLocation);
+            setPtGradYear(ptGradYear);
+          }
+        });
+        return unsubscribe;
+      }
+    }
+  }
+
+  useEffect(() => {
+    let unsubscribe;
+  
+    // Wrap the call to getInputValueFromFirebase in a try-catch block
+    try {
+      unsubscribe = getInputValueFromFirebase();
+    } catch (error) {
+      console.error("Error setting up subscription:", error);
+    }
+  
+    // Cleanup the subscription when the component unmounts
+    return () => {
+      // Check if unsubscribe is a function before calling it
+      if (unsubscribe && typeof unsubscribe === "function") {
+        unsubscribe();
+      }
+    };
+  }, []);
 
   return (
     <main>
@@ -89,21 +268,22 @@ const Profile = () => {
             </Link>
           </div>
           <Link href="/">
-            <div className="sidebar-subtitle text-white pl-6 py-2 mt-12 flex items-center hover:bg-white hover:bg-opacity-20">
+            <div className="rounded-md pl-6 mt-12 flex bg-white p-2 w-48 ml-6">
               <Image
-                src="/logo_airnav.jpg"
-                alt="profile"
-                width={200}
-                height={60}
-                className="mr-4"
+              src="/ic_printer.png"
+              alt="printer logo"
+              width={20}
+              height={20}
+              className="mr-4"
               />
+              <p className="pt-1">Cetak Dokumen</p> 
             </div>
           </Link>
         </div>
       </div>
       <div className="main-content flex">
         {/* Formulir */}
-        <form className="form-container flex-col w-max">
+        <form className="form-container flex-col w-max" onSubmit={handleSubmit}>
           <div className="ml-12 mt-6 mb-6">
             <h1 className="text-black font-bold text-4xl">
               Informasi Pendidikan
@@ -120,6 +300,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Nama Sekolah"
+                  value={sdName}
+                  onChange={(e) => setSdName(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-200">
@@ -128,6 +310,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Lokasi"
+                  value={sdLocation}
+                  onChange={(e) => setSdLocation(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-200">
@@ -136,6 +320,8 @@ const Profile = () => {
                   type="number"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Tahun Lulus"
+                  value={sdGradYear}
+                  onChange={(e) => setSdGradYear(e.target.value)}
                 />
               </div>
             </div>
@@ -148,6 +334,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Nama Sekolah"
+                  value={smpName}
+                  onChange={(e) => setSmpName(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-200">
@@ -156,6 +344,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Lokasi"
+                  value={smpLocation}
+                  onChange={(e) => setSmpLocation(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-200">
@@ -164,6 +354,8 @@ const Profile = () => {
                   type="number"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Tahun Lulus"
+                  value={smpGradYear}
+                  onChange={(e) => setSmpGradYear(e.target.value)}
                 />
               </div>
             </div>
@@ -176,6 +368,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Nama Sekolah"
+                  value={smaName}
+                  onChange={(e) => setSmaName(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-200">
@@ -184,6 +378,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Lokasi"
+                  value={smaLocation}
+                  onChange={(e) => setSmaLocation(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-200">
@@ -192,6 +388,8 @@ const Profile = () => {
                   type="number"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Tahun Lulus"
+                  value={smaGradYear}
+                  onChange={(e) => setSmaGradYear(e.target.value)}
                 />
               </div>
             </div>
@@ -204,6 +402,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Nama Sekolah"
+                  value={ptName}
+                  onChange={(e) => setPtName(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-200">
@@ -212,6 +412,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Lokasi"
+                  value={ptLocation}
+                  onChange={(e) => setPtLocation(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-200">
@@ -220,6 +422,8 @@ const Profile = () => {
                   type="number"
                   className="border border-gray-400 rounded-md px-4 py-2 mt-2"
                   placeholder="Tahun Lulus"
+                  value={ptGradYear}
+                  onChange={(e) => setPtGradYear(e.target.value)}
                 />
               </div>
             </div>
@@ -244,7 +448,6 @@ const Profile = () => {
   );
 };
 
-export default Profile;
 
 // CSS untuk styling
 <style jsx>{`
