@@ -27,10 +27,8 @@ export default function Profile(){
   const [previousWorkplace, setPreviousWorkplace] = useState("");
   const [religion, setReligion] = useState("");
 
-// check login
-function checkLogin() {
-  // Check if window is defined (client-side) before accessing document or window
-  if (typeof window !== 'undefined') {
+  //check login
+  function checkLogin(){
     const cookie = document.cookie;
     const cookieArray = cookie.split(";");
     const loginStatus = cookieArray[0].split("=")[1];
@@ -38,89 +36,54 @@ function checkLogin() {
       window.location.href = "/login";
     }
   }
-}
-
   checkLogin();
 
-  // user handler
-let userUid;
-
-if (typeof window !== 'undefined') {
-  const user = localStorage.getItem("user");
+  //user handler
+  const user =localStorage.getItem("user");
   const userObj = JSON.parse(user);
-  userUid = userObj.uid;
-}
+  const userUid = userObj.uid;
 
-async function getInputValueFromFirebase() {
-  if (userUid) {
-    const userDocRef = doc(db, "users", userUid);
 
-    // Fetch initial data
-    const initialDoc = await getDoc(userDocRef);
-    if (initialDoc.exists()) {
-      const data = initialDoc.data();
-      // ... (rest of the code remains the same)
-    }
-
-    // Check if window is defined (client-side) before running client-side code
-    if (typeof window !== "undefined") {
-      // Update state in real-time
-      const unsubscribe = onSnapshot(userDocRef, (doc) => {
-        if (doc.exists()) {
-          const data = doc.data();
-          // ... (rest of the code remains the same)
-        }
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const userDocRef = doc(collection(db, "users"), userUid);
+    const docSnap = await getDoc(userDocRef);
+    if (!docSnap.exists()) {
+      await setDoc(userDocRef, {
+        name: name,
+        phone: phone,
+        birthPlace: birthPlace,
+        instance: instance,
+        birthDate: birthDate,
+        position: position,
+        workStatus: workStatus,
+        address: address,
+        workPeriod: workPeriod,
+        identityNumber: identityNumber,
+        employeeNumber: employeeNumber,
+        previousWorkplace: previousWorkplace,
+        religion: religion
       });
-
-      // Return the unsubscribe function to use it when needed (e.g., on component unmount)
-      return unsubscribe;
+    } else {
+      //jika user sudah ada di firestore, maka update dokumen yang diubah saja
+      await updateDoc(userDocRef, {
+        name: name,
+        phone: phone,
+        birthPlace: birthPlace,
+        instance: instance,
+        birthDate: birthDate,
+        position: position,
+        workStatus: workStatus,
+        address: address,
+        workPeriod: workPeriod,
+        identityNumber: identityNumber,
+        employeeNumber: employeeNumber,
+        previousWorkplace: previousWorkplace,
+        religion: religion
+      });
+      window.location.href = "/profile";
     }
   }
-}
-
-// Call the function in a useEffect to ensure it runs after the initial render
-useEffect(() => {
-  let unsubscribe;
-
-  // Wrap the call to getInputValueFromFirebase in a try-catch block
-  try {
-    unsubscribe = getInputValueFromFirebase();
-  } catch (error) {
-    console.error("Error setting up subscription:", error);
-  }
-
-  // Cleanup the subscription when the component unmounts
-  return () => {
-    // Check if unsubscribe is a function before calling it
-    if (unsubscribe && typeof unsubscribe === "function") {
-      unsubscribe();
-    }
-  };
-}, []);
-
-// submit handler
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const userDocRef = doc(db, "users", userUid);
-  await updateDoc(userDocRef, {
-    name: name,
-    phone: phone,
-    birthPlace: birthPlace,
-    instance: instance,
-    birthDate: birthDate,
-    position: position,
-    workStatus: workStatus,
-    address: address,
-    workPeriod: workPeriod,
-    identityNumber: identityNumber,
-    employeeNumber: employeeNumber,
-    previousWorkplace: previousWorkplace,
-    religion: religion,
-  });
-  window.location.href = "/profile";
-}
-
-
 
   return (
     <main>
