@@ -1,13 +1,124 @@
 // Import yang diperlukan
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbarx from "../layout/Navbarx";
+import { db } from "../firebaseConfig";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  setDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { Cookie } from "next/font/google";
 
 // Komponen Profile
-const Profile = () => { 
+export default function Profile() {
+
+  // State untuk menyimpan data
+  const [dadName, setDadName] = React.useState("");
+  const [momName, setMomName] = React.useState("");
+  const [parentAddress, setParentAddress] = React.useState("");
+  const [wifeOrHusbandName, setWifeOrHusbandName] = React.useState("");
+  const [wifeOrHusbandAddress, setWifeOrHusbandAddress] = React.useState("");
+  const [phoneNumber, setPhoneNumber] = React.useState("");
+
+  //function check if user is logged in
+  function checkLogin() {
+    // Check if window is defined (client-side) before accessing document or window
+    if (typeof window !== "undefined") {
+      const loginStatus = localStorage.getItem("loginStatus");
+      if (loginStatus != "true") {
+        window.location.href = "/login";
+      } else {
+      }
+    }
+  }
+
+  checkLogin();
+
+  // user handler
+  let userUid;
+  if (typeof window !== "undefined") {
+    const user = localStorage.getItem("userData");
+    if (user) {
+      const userObj = JSON.parse(user);
+      userUid = userObj.uid;
+    } else {
+      // Handle the case where user data is not available in localStorage
+    }
+  }
+
+  async function getInputValueFromFirebase(){
+    if(userUid){
+      const docRef = doc(db, "users", userUid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setDadName(data.dadName);
+        setMomName(data.momName);
+        setParentAddress(data.parentAddress);
+        setWifeOrHusbandName(data.wifeOrHusbandName);
+        setWifeOrHusbandAddress(data.wifeOrHusbandAddress);
+        setPhoneNumber(data.phoneNumber);
+      }
+      if(typeof window !== "undefined"){
+        const unsubscribe = onSnapshot(doc(db, "users", userUid), (doc) => {
+          if(doc.exists()){
+            const data = doc.data();
+            setDadName(data.dadName);
+            setMomName(data.momName);
+            setParentAddress(data.parentAddress);
+            setWifeOrHusbandName(data.wifeOrHusbandName);
+            setWifeOrHusbandAddress(data.wifeOrHusbandAddress);
+            setPhoneNumber(data.phoneNumber);
+          }
+        });
+
+        return unsubscribe;
+    }
+  }
+}
+
+useEffect(() => {
+  let unsubscribe;
+
+  // Wrap the call to getInputValueFromFirebase in a try-catch block
+  try {
+    unsubscribe = getInputValueFromFirebase();
+  } catch (error) {
+    console.error("Error setting up subscription:", error);
+  }
+
+  // Cleanup the subscription when the component unmounts
+  return () => {
+    // Check if unsubscribe is a function before calling it
+    if (unsubscribe && typeof unsubscribe === "function") {
+      unsubscribe();
+    }
+  };
+}, []);
+
+// function to handle submit
+async function handleSubmit(e) {
+  e.preventDefault();
+  const docRef = doc(db, "users", userUid);
+  await updateDoc(docRef, {
+    dadName: dadName,
+    momName: momName,
+    parentAddress: parentAddress,
+    wifeOrHusbandName: wifeOrHusbandName,
+    wifeOrHusbandAddress: wifeOrHusbandAddress,
+    phoneNumber: phoneNumber,
+  });
+  window.location.href = "/family";
+}
 
   return (
     <main>
@@ -89,21 +200,22 @@ const Profile = () => {
               </Link>
             </div>
             <Link href="/">
-              <div className="sidebar-subtitle text-white pl-6 py-2 mt-12 flex items-center hover:bg-white hover:bg-opacity-20">
-                <Image
-                  src="/logo_airnav.jpg"
-                  alt="profile"
-                  width={200}
-                  height={60}
-                  className="mr-4"
-                />
-              </div>
-            </Link>
+            <div className="rounded-md pl-6 mt-12 flex bg-white p-2 w-48 ml-6">
+              <Image
+              src="/ic_printer.png"
+              alt="printer logo"
+              width={20}
+              height={20}
+              className="mr-4"
+              />
+              <p className="pt-1">Cetak Dokumen</p> 
+            </div>
+          </Link>
           </div>
         </div>
         <div className="main-content flex">
           {/* Formulir */}
-          <form className="form-container flex-col">
+          <form className="form-container flex-col" onSubmit={handleSubmit}>
             <div className="ml-12 mt-6 mb-6">
               <h1 className="text-black font-bold text-4xl">
                 Informasi Keluarga
@@ -121,6 +233,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-300 rounded-md px-4 py-2 w-96"
                   placeholder="Isi nama bapak disini"
+                  value={dadName}
+                  onChange={(e) => setDadName(e.target.value)}
                 />
               </div>
               <div className="flex flex-col ml-12">
@@ -129,6 +243,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-300 rounded-md px-4 py-2 w-96"
                   placeholder="Isi nama ibu disini"
+                  value={momName}
+                  onChange={(e) => setMomName(e.target.value)}
                 />
               </div>
             </div>
@@ -141,6 +257,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-300 rounded-md px-4 py-2 w-96"
                   placeholder="Isi alamat ortu disini disini"
+                  value={parentAddress}
+                  onChange={(e) => setParentAddress(e.target.value)}
                 />
               </div>
               <div className="flex flex-col ml-12">
@@ -151,6 +269,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-300 rounded-md px-4 py-2 w-96"
                   placeholder="Isi nama suami/istri disini"
+                  value={wifeOrHusbandName}
+                  onChange={(e) => setWifeOrHusbandName(e.target.value)}
                 />
               </div>
             </div>
@@ -163,6 +283,8 @@ const Profile = () => {
                   type="text"
                   className="border border-gray-300 rounded-md px-4 py-2 w-96"
                   placeholder="Isi alamat suami / istri disini"
+                  value={wifeOrHusbandAddress}
+                  onChange={(e) => setWifeOrHusbandAddress(e.target.value)}
                 />
               </div>
               {/* nomor telefon */}
@@ -171,9 +293,11 @@ const Profile = () => {
                   Nomor Telepon
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="border border-gray-300 rounded-md px-4 py-2 w-96"
                   placeholder="Isi nomor telepon disini"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                 />
               </div>
             </div>
@@ -192,36 +316,3 @@ const Profile = () => {
     </main>
   );
 };
-
-export default Profile;
-
-// CSS untuk styling
-<style jsx>{`
-  .flex {
-    display: flex;
-  }
-
-  .main-content {
-    flex-grow: 1;
-  }
-
-  .form-container {
-    background-color: #fff;
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-
-  .text-hint-dark {
-    color: #4e4e4e;
-  }
-
-  .w-200 {
-    width: 27rem;
-  }
-
-  /* Sesuaikan dengan gaya sidebar yang sudah Anda tentukan */
-  .sidebar {
-    /* Gaya sisi, atur sesuai kebutuhan Anda */
-  }
-`}</style>;
