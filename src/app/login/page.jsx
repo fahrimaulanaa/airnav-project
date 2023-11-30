@@ -28,11 +28,27 @@ export default function Login() {
   async function googleLogin() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
-    try {
-      await signInWithRedirect(auth, provider);
-    } catch (error) {
-      console.error("Google login error:", error);
-    }
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+
+        // Store user data and uid in localStorage
+        localStorage.setItem("userData", JSON.stringify(user));
+        localStorage.setItem("uid", user.uid);
+
+        document.cookie = "loginStatus=true;max-age=60*1000";
+        window.location.href = "/profile";
+
+        storeUserInfoToFirestore(user);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
   }
 
   async function storeUserInfoToFirestore(user) {
