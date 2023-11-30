@@ -1,47 +1,24 @@
 // Import yang diperlukan
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbarx from "../layout/Navbarx";
 import { db } from "../firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, setDoc, doc, getDoc, onSnapshot } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { Cookie } from "next/font/google";
+import {useHistory} from "react-router-dom";
 
-//async function addData() {
-
-async function addData(name, phone, birthPlace, birthDate, instance, position, workStatus, address, workPeriod, identityNumber, employeeNumber, previousWorkplace, religion){
-  try {
-    const docRef = await addDoc(collection(db, "users"), {
-      name: name,
-      phone: phone,
-      birthPlace: birthPlace,
-      birthDate: birthDate,
-      instance: instance,
-      position: position,
-      workStatus: workStatus,
-      address: address,
-      workPeriod: workPeriod,
-      identityNumber: identityNumber,
-      employeeNumber: employeeNumber,
-      previousWorkplace: previousWorkplace,
-      religion: religion,
-    });
-    console.log("Document written with ID: ", docRef.id);
-    return true;
-  } catch (error) {
-    console.error("Error adding document: ", error);
-    return false;
-  }
-}
 
 export default function Profile(){
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [birthPlace, setBirthPlace] = useState("");
-  const [birthDate, setBirthDate] = useState("");
   const [instance, setInstance] = useState("");
+  const [birthDate, setBirthDate] = useState("");
   const [position, setPosition] = useState("");
   const [workStatus, setWorkStatus] = useState("");
   const [address, setAddress] = useState("");
@@ -51,26 +28,129 @@ export default function Profile(){
   const [previousWorkplace, setPreviousWorkplace] = useState("");
   const [religion, setReligion] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const added = await addData(name, phone, birthPlace, birthDate, instance, position, workStatus, address, workPeriod, identityNumber, employeeNumber, previousWorkplace, religion);
-    if(added){
-      setName("");
-      setPhone("");
-      setBirthPlace("");
-      setBirthDate("");
-      setInstance("");
-      setPosition("");
-      setWorkStatus("");
-      setAddress("");
-      setWorkPeriod("");
-      setIdentityNumber("");
-      setEmployeeNumber("");
-      setPreviousWorkplace("");
-      setReligion("");
-      alert("Data berhasil ditambahkan");
+  //check login
+  function checkLogin(){
+    const cookie = document.cookie;
+    const cookieArray = cookie.split(";");
+    const loginStatus = cookieArray[0].split("=")[1];
+    if (loginStatus !== "true") {
+      window.location.href = "/login";
     }
   }
+  checkLogin();
+
+  //user handler
+  const user =localStorage.getItem("user");
+  const userObj = JSON.parse(user);
+  const userUid = userObj.uid;
+
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const userDocRef = doc(collection(db, "users"), userUid);
+    const docSnap = await getDoc(userDocRef);
+    if (!docSnap.exists()) {
+      await setDoc(userDocRef, {
+        name: name,
+        phone: phone,
+        birthPlace: birthPlace,
+        instance: instance,
+        birthDate: birthDate,
+        position: position,
+        workStatus: workStatus,
+        address: address,
+        workPeriod: workPeriod,
+        identityNumber: identityNumber,
+        employeeNumber: employeeNumber,
+        previousWorkplace: previousWorkplace,
+        religion: religion
+      });
+    } else {
+      //jika user sudah ada di firestore, maka update dokumen yang diubah saja
+      await updateDoc(userDocRef, {
+        name: name,
+        phone: phone,
+        birthPlace: birthPlace,
+        instance: instance,
+        birthDate: birthDate,
+        position: position,
+        workStatus: workStatus,
+        address: address,
+        workPeriod: workPeriod,
+        identityNumber: identityNumber,
+        employeeNumber: employeeNumber,
+        previousWorkplace: previousWorkplace,
+        religion: religion
+      });
+      window.location.href = "/profile";
+    }
+  }
+
+  async function getInputValueFromFirebase() {
+    const userDocRef = doc(db, "users", userUid);
+  
+    // Fetch initial data
+    const initialDoc = await getDoc(userDocRef);
+    if (initialDoc.exists()) {
+      const data = initialDoc.data();
+      setName(data.name);
+      setPhone(data.phone);
+      setBirthPlace(data.birthPlace);
+      setInstance(data.instance);
+      setBirthDate(data.birthDate);
+      setPosition(data.position);
+      setWorkStatus(data.workStatus);
+      setAddress(data.address);
+      setWorkPeriod(data.workPeriod);
+      setIdentityNumber(data.identityNumber);
+      setEmployeeNumber(data.employeeNumber);
+      setPreviousWorkplace(data.previousWorkplace);
+      setReligion(data.religion);
+    }
+  
+    // Update state in real-time
+    const unsubscribe = onSnapshot(userDocRef, (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        setName(data.name);
+        setPhone(data.phone);
+        setBirthPlace(data.birthPlace);
+        setInstance(data.instance);
+        setBirthDate(data.birthDate);
+        setPosition(data.position);
+        setWorkStatus(data.workStatus);
+        setAddress(data.address);
+        setWorkPeriod(data.workPeriod);
+        setIdentityNumber(data.identityNumber);
+        setEmployeeNumber(data.employeeNumber);
+        setPreviousWorkplace(data.previousWorkplace);
+        setReligion(data.religion);
+      }
+    });
+  
+    // Return the unsubscribe function to use it when needed (e.g., on component unmount)
+    return unsubscribe;
+  }
+  
+  // Call the function in a useEffect to ensure it runs after the initial render
+  useEffect(() => {
+    let unsubscribe;
+  
+    // Wrap the call to getInputValueFromFirebase in a try-catch block
+    try {
+      unsubscribe = getInputValueFromFirebase();
+    } catch (error) {
+      console.error("Error setting up subscription:", error);
+    }
+  
+    // Cleanup the subscription when the component unmounts
+    return () => {
+      // Check if unsubscribe is a function before calling it
+      if (unsubscribe && typeof unsubscribe === "function") {
+        unsubscribe();
+      }
+    };
+  }, []);
 
   return (
     <main>
@@ -415,4 +495,5 @@ export default function Profile(){
   .sidebar {
     /* Gaya sisi, atur sesuai kebutuhan Anda */
   }
-`}</style>;
+`}
+</style>;

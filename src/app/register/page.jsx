@@ -12,17 +12,18 @@ export default function Register() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((result) => {
+    .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        localStorage.setItem("user", JSON.stringify(user));
 
-        //set cookie for loginStatus
-        document.cookie = "loginStatus=true;max-age=86400;path=/";
+        // Store user data and uid in localStorage
+        localStorage.setItem("userData", JSON.stringify(user));
+        localStorage.setItem("uid", user.uid);
+
         storeUserInfoToFirestore(user);
-      })
+    })
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;

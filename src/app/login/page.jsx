@@ -4,11 +4,14 @@ import Image from "next/image";
 import React from "react";
 import { auth } from "../firebaseConfig";
 import { db } from "../firebaseConfig";
+import { useHistory } from "react-router-dom";
+
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { collection, addDoc, updateDoc, setDoc, doc, getDoc } from "firebase/firestore";
 
 export default function Login() {
     
+
   function googleLogin() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
@@ -16,19 +19,22 @@ export default function Login() {
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
-        // The signed-in user info.
         const user = result.user;
         localStorage.setItem("user", JSON.stringify(user));
 
         //set cookie for loginStatus
         document.cookie = "loginStatus=true;max-age=86400;path=/";
         storeUserInfoToFirestore(user);
+
+        // Redirect to /profile
+        const history = useHistory();
+        console.log(history);
+        history.push("/profile");
       })
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-
       });
   }
 
@@ -38,7 +44,7 @@ export default function Login() {
     if (!docSnap.exists()) {
       await setDoc(userDocRef, {
         email: user.email,
-        name: user.displayName,
+        displayName: user.displayName,
         photoURL: user.photoURL,
         uid: user.uid,
         lastSignInTime: user.metadata.lastSignInTime,
@@ -50,7 +56,7 @@ export default function Login() {
         //jika user sudah ada di firestore, maka update
         await updateDoc(userDocRef, {
             email: user.email,
-            name: user.displayName,
+            displayName: user.displayName,
             photoURL: user.photoURL,
             uid: user.uid,
             lastSignInTime: user.metadata.lastSignInTime,
