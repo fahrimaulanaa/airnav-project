@@ -28,15 +28,15 @@ export default function Profile(){
   const [religion, setReligion] = useState("");
 
   //check login
-  function checkLogin(){
-    const cookie = document.cookie;
-    const cookieArray = cookie.split(";");
-    const loginStatus = cookieArray[0].split("=")[1];
-    if (loginStatus !== "true") {
-      window.location.href = "/login";
-    }
-  }
-  checkLogin();
+  // function checkLogin(){
+  //   const cookie = document.cookie;
+  //   const cookieArray = cookie.split(";");
+  //   const loginStatus = cookieArray[0].split("=")[1];
+  //   if (loginStatus !== "true") {
+  //     window.location.href = "/login";
+  //   }
+  // }
+  // checkLogin();
 
   //user handler
   const user =localStorage.getItem("user");
