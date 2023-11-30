@@ -33,7 +33,7 @@ function checkLogin() {
   if (typeof window !== 'undefined') {
     const cookie = document.cookie;
     const cookieArray = cookie.split(";");
-    const loginStatusCookie = cookieArray.find(cookie => cookie.trim().startsWith("loginStatus="));
+    const loginStatusCookie = cookieArray.find(cookie => cookie.trim().startsWith("loginStatus"));
     
     if (loginStatusCookie) {
       const loginStatus = loginStatusCookie.split("=")[1].trim();
@@ -44,7 +44,7 @@ function checkLogin() {
       window.location.href = "/login";
     }    
 }
-}
+} 
 
 checkLogin();
 
