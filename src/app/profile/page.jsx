@@ -45,7 +45,7 @@ checkLogin();
   // user handler
 let userUid;
 if (typeof window !== 'undefined') {
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem("userData");
   if (user) {
     const userObj = JSON.parse(user);
     userUid = userObj.uid;
