@@ -27,8 +27,10 @@ export default function Profile(){
   const [previousWorkplace, setPreviousWorkplace] = useState("");
   const [religion, setReligion] = useState("");
 
-  //check login
-  function checkLogin(){
+// check login
+function checkLogin() {
+  // Check if window is defined (client-side) before accessing document or window
+  if (typeof window !== 'undefined') {
     const cookie = document.cookie;
     const cookieArray = cookie.split(";");
     const loginStatus = cookieArray[0].split("=")[1];
@@ -36,6 +38,8 @@ export default function Profile(){
       window.location.href = "/login";
     }
   }
+}
+
   checkLogin();
 
   //user handler
