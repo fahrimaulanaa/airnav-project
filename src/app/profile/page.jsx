@@ -98,6 +98,29 @@ useEffect(() => {
   };
 }, []);
 
+// submit handler
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const userDocRef = doc(db, "users", userUid);
+  await updateDoc(userDocRef, {
+    name: name,
+    phone: phone,
+    birthPlace: birthPlace,
+    instance: instance,
+    birthDate: birthDate,
+    position: position,
+    workStatus: workStatus,
+    address: address,
+    workPeriod: workPeriod,
+    identityNumber: identityNumber,
+    employeeNumber: employeeNumber,
+    previousWorkplace: previousWorkplace,
+    religion: religion,
+  });
+  window.location.href = "/profile";
+}
+
+
 
   return (
     <main>
