@@ -42,80 +42,62 @@ function checkLogin() {
 
   checkLogin();
 
-  //user handler
-  const user =localStorage.getItem("user");
+  // user handler
+let userUid;
+
+if (typeof window !== 'undefined') {
+  const user = localStorage.getItem("user");
   const userObj = JSON.parse(user);
-  const userUid = userObj.uid;
+  userUid = userObj.uid;
+}
 
-
-  async function getInputValueFromFirebase() {
+async function getInputValueFromFirebase() {
+  if (userUid) {
     const userDocRef = doc(db, "users", userUid);
-  
+
     // Fetch initial data
     const initialDoc = await getDoc(userDocRef);
     if (initialDoc.exists()) {
       const data = initialDoc.data();
-      setName(data.name);
-      setPhone(data.phone);
-      setBirthPlace(data.birthPlace);
-      setInstance(data.instance);
-      setBirthDate(data.birthDate);
-      setPosition(data.position);
-      setWorkStatus(data.workStatus);
-      setAddress(data.address);
-      setWorkPeriod(data.workPeriod);
-      setIdentityNumber(data.identityNumber);
-      setEmployeeNumber(data.employeeNumber);
-      setPreviousWorkplace(data.previousWorkplace);
-      setReligion(data.religion);
+      // ... (rest of the code remains the same)
     }
-  
+
     // Check if window is defined (client-side) before running client-side code
     if (typeof window !== "undefined") {
       // Update state in real-time
       const unsubscribe = onSnapshot(userDocRef, (doc) => {
         if (doc.exists()) {
           const data = doc.data();
-          setName(data.name);
-          setPhone(data.phone);
-          setBirthPlace(data.birthPlace);
-          setInstance(data.instance);
-          setBirthDate(data.birthDate);
-          setPosition(data.position);
-          setWorkStatus(data.workStatus);
-          setAddress(data.address);
-          setWorkPeriod(data.workPeriod);
-          setIdentityNumber(data.identityNumber);
-          setEmployeeNumber(data.employeeNumber);
-          setPreviousWorkplace(data.previousWorkplace);
-          setReligion(data.religion);
+          // ... (rest of the code remains the same)
         }
       });
-  
+
       // Return the unsubscribe function to use it when needed (e.g., on component unmount)
       return unsubscribe;
     }
   }
-  
-  // Call the function in a useEffect to ensure it runs after the initial render
-  useEffect(() => {
-    let unsubscribe;
-  
-    // Wrap the call to getInputValueFromFirebase in a try-catch block
-    try {
-      unsubscribe = getInputValueFromFirebase();
-    } catch (error) {
-      console.error("Error setting up subscription:", error);
+}
+
+// Call the function in a useEffect to ensure it runs after the initial render
+useEffect(() => {
+  let unsubscribe;
+
+  // Wrap the call to getInputValueFromFirebase in a try-catch block
+  try {
+    unsubscribe = getInputValueFromFirebase();
+  } catch (error) {
+    console.error("Error setting up subscription:", error);
+  }
+
+  // Cleanup the subscription when the component unmounts
+  return () => {
+    // Check if unsubscribe is a function before calling it
+    if (unsubscribe && typeof unsubscribe === "function") {
+      unsubscribe();
     }
-  
-    // Cleanup the subscription when the component unmounts
-    return () => {
-      // Check if unsubscribe is a function before calling it
-      if (unsubscribe && typeof unsubscribe === "function") {
-        unsubscribe();
-      }
-    };
-  }, []);
+  };
+}, []);
+
 
   return (
     <main>
