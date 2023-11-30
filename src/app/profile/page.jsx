@@ -28,62 +28,21 @@ export default function Profile(){
   const [religion, setReligion] = useState("");
 
   //check login
-  // function checkLogin(){
-  //   const cookie = document.cookie;
-  //   const cookieArray = cookie.split(";");
-  //   const loginStatus = cookieArray[0].split("=")[1];
-  //   if (loginStatus !== "true") {
-  //     window.location.href = "/login";
-  //   }
-  // }
-  // checkLogin();
+  function checkLogin(){
+    const cookie = document.cookie;
+    const cookieArray = cookie.split(";");
+    const loginStatus = cookieArray[0].split("=")[1];
+    if (loginStatus !== "true") {
+      window.location.href = "/login";
+    }
+  }
+  checkLogin();
 
   //user handler
   const user =localStorage.getItem("user");
   const userObj = JSON.parse(user);
   const userUid = userObj.uid;
 
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const userDocRef = doc(collection(db, "users"), userUid);
-    const docSnap = await getDoc(userDocRef);
-    if (!docSnap.exists()) {
-      await setDoc(userDocRef, {
-        name: name,
-        phone: phone,
-        birthPlace: birthPlace,
-        instance: instance,
-        birthDate: birthDate,
-        position: position,
-        workStatus: workStatus,
-        address: address,
-        workPeriod: workPeriod,
-        identityNumber: identityNumber,
-        employeeNumber: employeeNumber,
-        previousWorkplace: previousWorkplace,
-        religion: religion
-      });
-    } else {
-      //jika user sudah ada di firestore, maka update dokumen yang diubah saja
-      await updateDoc(userDocRef, {
-        name: name,
-        phone: phone,
-        birthPlace: birthPlace,
-        instance: instance,
-        birthDate: birthDate,
-        position: position,
-        workStatus: workStatus,
-        address: address,
-        workPeriod: workPeriod,
-        identityNumber: identityNumber,
-        employeeNumber: employeeNumber,
-        previousWorkplace: previousWorkplace,
-        religion: religion
-      });
-      window.location.href = "/profile";
-    }
-  }
 
   async function getInputValueFromFirebase() {
     const userDocRef = doc(db, "users", userUid);
