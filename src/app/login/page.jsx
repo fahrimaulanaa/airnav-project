@@ -10,28 +10,28 @@ import { collection, addDoc, updateDoc, setDoc, doc, getDoc } from "firebase/fir
 
 export default function Login() {
     
+  useEffect(() => {
+    const handleRedirect = async () => {
+      const auth = getAuth();
+      try {
+        const result = await getRedirectResult(auth);
+        // Handle the result if needed
+      } catch (error) {
+        console.error("Google login redirect error:", error);
+      }
+    };
+
+    handleRedirect();
+  }, []);
 
   async function googleLogin() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-        localStorage.setItem("user", JSON.stringify(user));
-
-        //set cookie for loginStatus
-        document.cookie = "loginStatus=true;max-age=86400;path=/";
-        storeUserInfoToFirestore(user);
-
-        window.location.href = "/profile";
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+    try {
+      await signInWithRedirect(auth, provider);
+    } catch (error) {
+      console.error("Google login error:", error);
+    }
   }
 
   async function storeUserInfoToFirestore(user) {
