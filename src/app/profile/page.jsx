@@ -35,7 +35,7 @@ function checkLogin() {
     if(loginStatus != "true"){
       window.location.href = "/login";
     }else{
-      
+
     }
 }
 } 
@@ -65,7 +65,19 @@ async function getInputValueFromFirebase() {
     const initialDoc = await getDoc(userDocRef);
     if (initialDoc.exists()) {
       const data = initialDoc.data();
-      // ... (rest of the code remains the same)
+      setName(data.name);
+      setPhone(data.phone);
+      setBirthPlace(data.birthPlace);
+      setInstance(data.instance);
+      setBirthDate(data.birthDate);
+      setPosition(data.position);
+      setWorkStatus(data.workStatus);
+      setAddress(data.address);
+      setWorkPeriod(data.workPeriod);
+      setIdentityNumber(data.identityNumber);
+      setEmployeeNumber(data.employeeNumber);
+      setPreviousWorkplace(data.previousWorkplace);
+      setReligion(data.religion);
     }
 
     // Check if window is defined (client-side) before running client-side code
@@ -75,6 +87,19 @@ async function getInputValueFromFirebase() {
         if (doc.exists()) {
           const data = doc.data();
           // ... (rest of the code remains the same)
+          setName(data.name);
+          setPhone(data.phone);
+          setBirthPlace(data.birthPlace);
+          setInstance(data.instance);
+          setBirthDate(data.birthDate);
+          setPosition(data.position);
+          setWorkStatus(data.workStatus);
+          setAddress(data.address);
+          setWorkPeriod(data.workPeriod);
+          setIdentityNumber(data.identityNumber);
+          setEmployeeNumber(data.employeeNumber);
+          setPreviousWorkplace(data.previousWorkplace);
+          setReligion(data.religion);
         }
       });
 
