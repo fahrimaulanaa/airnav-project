@@ -5,13 +5,13 @@ import React from "react";
 import { auth } from "../firebaseConfig";
 import { db } from "../firebaseConfig";
 import { useHistory } from "react-router-dom";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, } from "firebase/auth";
 import { collection, addDoc, updateDoc, setDoc, doc, getDoc } from "firebase/firestore";
 
 export default function Login() {
     
 
-  function googleLogin() {
+  async function googleLogin() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
