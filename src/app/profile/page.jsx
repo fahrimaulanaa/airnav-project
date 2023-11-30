@@ -44,6 +44,7 @@ function checkLogin() {
       window.location.href = "/login";
     }    
 }
+}
 
 checkLogin();
 
