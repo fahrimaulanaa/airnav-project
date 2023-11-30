@@ -37,9 +37,8 @@ export default function Login() {
 
         // Store user data and uid in localStorage
         localStorage.setItem("userData", JSON.stringify(user));
-        localStorage.setItem("uid", user.uid);
+        localStorage.setItem("loginStatus", true);
 
-        document.cookie = "loginStatus=true;max-age=60*1000";
         window.location.href = "/profile";
 
         storeUserInfoToFirestore(user);

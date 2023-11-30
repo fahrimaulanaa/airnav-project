@@ -31,18 +31,12 @@ export default function Profile(){
 function checkLogin() {
   // Check if window is defined (client-side) before accessing document or window
   if (typeof window !== 'undefined') {
-    const cookie = document.cookie;
-    const cookieArray = cookie.split(";");
-    const loginStatusCookie = cookieArray.find(cookie => cookie.trim().startsWith("loginStatus"));
-    
-    if (loginStatusCookie) {
-      const loginStatus = loginStatusCookie.split("")[1].trim();
-      if (loginStatus !== "true") {
-        window.location.href = "/login";
-      }
-    } else {
+    const loginStatus = localStorage.getItem("loginStatus");
+    if(loginStatus != "true"){
       window.location.href = "/login";
-    }    
+    }else{
+      
+    }
 }
 } 
 
