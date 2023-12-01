@@ -267,8 +267,8 @@ export default function Profile() {
                     type="text"
                     placeholder="isi data disini"
                     value={airportArea}
-                    onChange={(e) => setAirportArea(e.target.value)}
-                ></input>
+                    onChange={(e) => setAirportArea(e.target.value)}>
+                    </input>
                 </div>
             </div>
             <div className="flex flex-col ml-12 mt-12">
@@ -276,15 +276,21 @@ export default function Profile() {
                 <label htmlFor="jobdesc" className="text-hint-dark pb-1 font-semibold">
                 Frekuensi Ke Bandara
                 </label>
-                <input
+                <select
                     className="border-2 border-gray-300 rounded-md p-2"
                     id="jobdesc"
                     name="jobdesc"
                     type="text"
                     placeholder="isi data disini"
                     value={airportFrequency}
-                    onChange={(e) => setAirportFrequency(e.target.value)}
-                ></input>
+                    onChange={(e) => setAirportFrequency(e.target.value)}>
+                      <option value="--Pilih frekuensi--">--Pilih Frekuensi--</option>
+                      <option value="Sangat Jarang">Sangat Jarang</option>
+                      <option value="Jarang">Jarang</option>
+                      <option value="Cukup Sering">Cukup Sering</option>
+                      <option value="Sering">Sering</option>
+                      <option value="Sangat Sering">Sangat Sering</option>
+                </select>
                 </div>
             </div>
             {/* button simpan data */}
