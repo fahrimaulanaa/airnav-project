@@ -7,8 +7,7 @@ import Link from "next/link";
 import Navbarx from "../layout/Navbarx";
 
 // Komponen Profile
-const Profile = () => {
-  const router = useRouter();
+export default function Profile() {
 
   return (
     <main>
@@ -90,16 +89,17 @@ const Profile = () => {
             </Link>
           </div>
           <Link href="/">
-            <div className="sidebar-subtitle text-white pl-6 py-2 mt-12 flex items-center hover:bg-white hover:bg-opacity-20">
-              <Image
-                src="/logo_airnav.jpg"
-                alt="profile"
-                width={200}
-                height={60}
-                className="mr-4"
-              />
-            </div>
-          </Link>
+              <div className="rounded-md pl-6 mt-12 flex bg-white p-2 w-48 ml-6">
+                <Image
+                  src="/ic_printer.png"
+                  alt="printer logo"
+                  width={20}
+                  height={20}
+                  className="mr-4"
+                />
+                <p className="pt-1">Cetak Dokumen</p>
+              </div>
+            </Link>
         </div>
       </div>
       <div className="main-content flex">
@@ -168,8 +168,6 @@ const Profile = () => {
     </main>
   );
 };
-
-export default Profile;
 
 // CSS untuk styling
 <style jsx>{`

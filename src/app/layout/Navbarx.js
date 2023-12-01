@@ -5,19 +5,30 @@ import React from "react";
 const Navbarx = () => {
   return (
     <nav
-      className="bg-white h-16 shadow-md items-center justify-center"
-      style={{ position: "sticky", top: 0 }}
-    >
-      <div className="items-center flex-shrink-0 justify-between">
+      className="bg-white h-16x  shadow-md items-center justify-center w-screen"
+      style={{ 
+        position: "sticky", top: 0, zIndex: 1000
+     }}>
+      <div className="items-center flex">
         <Link href="/">
           <Image
             src="/logo_airnav.jpg"
             alt="AirNav Logo"
             width={150}
             height={100}
-            className="p-4 ml-12"
+            className="p-4 mr-96 ml-12"
           />    
         </Link>
+        <div className="flex items-center rounded-md shadow-md px-3 ml-96">
+          <Image
+          src="/ic_logout.png"
+          alt="logout Logo"
+          width={30}
+          height={30}
+          className="m-2"
+          />
+          <p className="text-md font-semibold text-AirNav">Logout</p>
+        </div>
       </div>
     </nav>
   );

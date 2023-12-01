@@ -100,7 +100,7 @@ export default function Profile() {
             setWorkPeriod(data.workPeriod);
             setIdentityNumber(data.identityNumber);
             setEmployeeNumber(data.employeeNumber);
-            setPreviousWorkplace(data.previousWorkplace);
+            setPreviousWorkplace(data.previousWorkplace || "");
             setReligion(data.religion);
           }
         });
@@ -270,6 +270,7 @@ export default function Profile() {
                   placeholder="Isi nama disini"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  required
                 />
               </div>
               <div className="flex flex-col ml-12">
@@ -284,6 +285,7 @@ export default function Profile() {
                   name="phonenumber"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -300,6 +302,7 @@ export default function Profile() {
                   name="birthPlace"
                   value={birthPlace}
                   onChange={(e) => setBirthPlace(e.target.value)}
+                  required
                 />
               </div>
               <div className="flex flex-col ml-12">
@@ -314,6 +317,7 @@ export default function Profile() {
                   name="Instance"
                   value={instance}
                   onChange={(e) => setInstance(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -330,6 +334,7 @@ export default function Profile() {
                   name="birthdate"
                   value={birthDate}
                   onChange={(e) => setBirthDate(e.target.value)}
+                  required
                 />
               </div>
               <div className="flex flex-col ml-12">
@@ -342,6 +347,7 @@ export default function Profile() {
                   name="Position"
                   value={position}
                   onChange={(e) => setPosition(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -358,6 +364,7 @@ export default function Profile() {
                   name="workStatus"
                   value={workStatus}
                   onChange={(e) => setWorkStatus(e.target.value)}
+                  required
                 />
               </div>
               <div className="flex flex-col ml-12">
@@ -370,6 +377,7 @@ export default function Profile() {
                   name="address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -387,6 +395,7 @@ export default function Profile() {
                   name="workPeriod"
                   value={workPeriod}
                   onChange={(e) => setWorkPeriod(e.target.value)}
+                  required
                 />
               </div>
               {/* Nomor Identitas */}
@@ -402,6 +411,7 @@ export default function Profile() {
                   name="identityNumber"
                   value={identityNumber}
                   onChange={(e) => setIdentityNumber(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -419,6 +429,7 @@ export default function Profile() {
                   name="employeeNumber"
                   value={employeeNumber}
                   onChange={(e) => setEmployeeNumber(e.target.value)}
+                  required
                 />
               </div>
               {/* Tempat Bekerja Sebelumnya (opsional) */}
@@ -449,6 +460,7 @@ export default function Profile() {
                   name="religion"
                   value={religion}
                   onChange={(e) => setReligion(e.target.value)}
+                  required 
                 />
               </div>
               {/* button simpan */}
