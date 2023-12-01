@@ -1,13 +1,140 @@
 // Import yang diperlukan
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbarx from "../layout/Navbarx";
+import { db } from "../firebaseConfig";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  setDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { Cookie } from "next/font/google";
 
 // Komponen Profile
 export default function Profile() {
+
+  //state untuk menyimpan data
+  const [airportActivity, setAirportActivity] = React.useState("");
+  const [airportArea, setAirportArea] = React.useState("");
+  const [airportFrequency, setAirportFrequency] = React.useState("");
+
+    //function check if user is logged in
+    function checkLogin() {
+      // Check if window is defined (client-side) before accessing document or window
+      if (typeof window !== "undefined") {
+        const loginStatus = localStorage.getItem("loginStatus");
+        if (loginStatus != "true") {
+          window.location.href = "/login";
+        } else {
+        }
+      }
+    }
+  
+    checkLogin();
+  
+    // user handler
+    let userUid;
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("userData");
+      if (user) {
+        const userObj = JSON.parse(user);
+        userUid = userObj.uid;
+      } else {
+        // Handle the case where user data is not available in localStorage
+      }
+    }
+
+    async function getInputValueFromFirebase(){
+      if(userUid){
+        const docRef = doc(db, "users", userUid);
+        const docSnap = await getDoc(docRef);
+      }
+    }
+
+    //handleSubmit
+    async function handleSubmit(e){
+      e.preventDefault();
+      const userDocRef = doc(db, "users", userUid);
+      const docSnap = await getDoc(userDocRef);
+      const airportActivityData = [
+        {
+          airportActivity: airportActivity,
+          airportArea: airportArea,
+          airportFrequency: airportFrequency,
+        },
+      ];
+      if(docSnap.exists()){
+        await updateDoc(userDocRef, {
+          airportActivity: airportActivityData,
+        });
+      }else{
+        await setDoc(userDocRef, {
+          airportActivity: airportActivityData,
+        });
+      }
+    }
+
+    //getInput
+    async function getInputValueFromFirebase(){
+      if(userUid){
+        const docRef = doc(db, "users", userUid);
+        const docSnap = await getDoc(docRef);
+        if(docSnap.exists()){
+          const data = docSnap.data();
+          const airportActivityData = data.airportActivity;
+          const airportActivity = airportActivityData[0].airportActivity;
+          const airportArea = airportActivityData[0].airportArea;
+          const airportFrequency = airportActivityData[0].airportFrequency;
+          setAirportActivity(airportActivity || "");
+          setAirportArea(airportArea || "");
+          setAirportFrequency(airportFrequency || "");
+        }
+        if(typeof window !== "undefined"){
+          const unsubscribe = onSnapshot(docRef, (doc) => {
+            const data = doc.data();
+            const airportActivityData = data.airportActivity;
+            const airportActivity = airportActivityData[0].airportActivity;
+            const airportArea = airportActivityData[0].airportArea;
+            const airportFrequency = airportActivityData[0].airportFrequency;
+            setAirportActivity(airportActivity || "");
+            setAirportArea(airportArea || "");
+            setAirportFrequency(airportFrequency || "");
+          });
+
+          return unsubscribe;
+
+        }
+      }
+    }
+
+    useEffect(() => {
+      let unsubscribe;
+    
+      // Wrap the call to getInputValueFromFirebase in a try-catch block
+      try {
+        unsubscribe = getInputValueFromFirebase();
+      } catch (error) {
+        console.error("Error setting up subscription:", error);
+      }
+    
+      // Cleanup the subscription when the component unmounts
+      return () => {
+        // Check if unsubscribe is a function before calling it
+        if (unsubscribe && typeof unsubscribe === "function") {
+          unsubscribe();
+        }
+      };
+    }, []);
+
+
 
   return (
     <main>
@@ -104,7 +231,7 @@ export default function Profile() {
       </div>
       <div className="main-content flex">
         {/* Formulir */}
-        <form className="form-container flex-col w-full">
+        <form className="form-container flex-col w-full" onSubmit={handleSubmit}>
           <div className="ml-12 mt-6 mb-6">
             <h1 className="text-black font-bold text-4xl">
               Deskripsi Tugas dan Pekerjaan
@@ -116,13 +243,16 @@ export default function Profile() {
                 <label htmlFor="jobdesc" className="text-hint-dark pb-1 font-semibold">
                 Jenis Kegiatan Yang Dilakukan di Bandara
                 </label>
-                <input
+                <textarea
                     className="border-2 border-gray-300 rounded-md p-2"
+                    rows={2}
                     id="jobdescription"
                     name="jobdesc"
                     type="text"
                     placeholder="isi data disini"
-                ></input>
+                    value={airportActivity}
+                    onChange={(e) => setAirportActivity(e.target.value)}
+                ></textarea>
                 </div>
             </div>
             <div className="flex flex-col ml-12 mt-12">
@@ -136,6 +266,8 @@ export default function Profile() {
                     name="jobdesc"
                     type="text"
                     placeholder="isi data disini"
+                    value={airportArea}
+                    onChange={(e) => setAirportArea(e.target.value)}
                 ></input>
                 </div>
             </div>
@@ -150,12 +282,14 @@ export default function Profile() {
                     name="jobdesc"
                     type="text"
                     placeholder="isi data disini"
+                    value={airportFrequency}
+                    onChange={(e) => setAirportFrequency(e.target.value)}
                 ></input>
                 </div>
             </div>
             {/* button simpan data */}
             <div className="flex flex-row ml-12 mt-12">
-                <button className="bg-airnav-blue text-white p-3 w-full rounded-md hover:bg-transparent hover:text-AirNav hover:border-AirNav hover:border transition duration-300 ease-in-out border">
+                <button type="submit" className="bg-airnav-blue text-white p-3 w-full rounded-md hover:bg-transparent hover:text-AirNav hover:border-AirNav hover:border transition duration-300 ease-in-out border">
                 Simpan Data
                 </button>
             </div>
