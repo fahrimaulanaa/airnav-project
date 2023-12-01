@@ -59,31 +59,44 @@ export default function Profile() {
     if(userUid){
       const docRef = doc(db, "users", userUid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
+      if(docSnap.exists()){
         const data = docSnap.data();
-        setDadName(data.dadName);
-        setMomName(data.momName);
-        setParentAddress(data.parentAddress);
-        setWifeOrHusbandName(data.wifeOrHusbandName);
-        setWifeOrHusbandAddress(data.wifeOrHusbandAddress);
-        setPhoneNumber(data.phoneNumber);
+        const familyData = data.familyData;
+        const dadName = familyData[0].dadName;
+        const momName = familyData[0].momName;
+        const parentAddress = familyData[0].parentAddress;
+        const wifeOrHusbandName = familyData[0].wifeOrHusbandName;
+        const wifeOrHusbandAddress = familyData[0].wifeOrHusbandAddress;
+        const phoneNumber = familyData[0].phoneNumber;
+        setDadName(dadName || "");
+        setMomName(momName || "");
+        setParentAddress(parentAddress || "");
+        setWifeOrHusbandName(wifeOrHusbandName || "");
+        setWifeOrHusbandAddress(wifeOrHusbandAddress || "");
+        setPhoneNumber(phoneNumber || "");
       }
       if(typeof window !== "undefined"){
-        const unsubscribe = onSnapshot(doc(db, "users", userUid), (doc) => {
-          if(doc.exists()){
-            const data = doc.data();
-            setDadName(data.dadName);
-            setMomName(data.momName);
-            setParentAddress(data.parentAddress);
-            setWifeOrHusbandName(data.wifeOrHusbandName);
-            setWifeOrHusbandAddress(data.wifeOrHusbandAddress);
-            setPhoneNumber(data.phoneNumber);
-          }
+        const unsubscribe = onSnapshot(docRef, (doc) => {
+          const data = doc.data();
+          const familyData = data.familyData;
+          const dadName = familyData[0].dadName;
+          const momName = familyData[0].momName;
+          const parentAddress = familyData[0].parentAddress;
+          const wifeOrHusbandName = familyData[0].wifeOrHusbandName;
+          const wifeOrHusbandAddress = familyData[0].wifeOrHusbandAddress;
+          const phoneNumber = familyData[0].phoneNumber;
+          setDadName(dadName || "");
+          setMomName(momName || "");
+          setParentAddress(parentAddress || "");
+          setWifeOrHusbandName(wifeOrHusbandName || "");
+          setWifeOrHusbandAddress(wifeOrHusbandAddress || "");
+          setPhoneNumber(phoneNumber || "");
         });
-
-        return unsubscribe;
+        return () => {
+          unsubscribe();
+        }
+      }
     }
-  }
 }
 
 useEffect(() => {
@@ -109,15 +122,26 @@ useEffect(() => {
 async function handleSubmit(e) {
   e.preventDefault();
   const docRef = doc(db, "users", userUid);
-  await updateDoc(docRef, {
-    dadName: dadName,
-    momName: momName,
-    parentAddress: parentAddress,
-    wifeOrHusbandName: wifeOrHusbandName,
-    wifeOrHusbandAddress: wifeOrHusbandAddress,
-    phoneNumber: phoneNumber,
-  });
-  window.location.href = "/family";
+  const docSnap = await getDoc(docRef);
+  const familyData = [
+    {
+      dadName: dadName,
+      momName: momName,
+      parentAddress: parentAddress,
+      wifeOrHusbandName: wifeOrHusbandName,
+      wifeOrHusbandAddress: wifeOrHusbandAddress,
+      phoneNumber: phoneNumber,
+    },
+  ];
+  if(docSnap.exists()){
+    await updateDoc(docRef, {
+      familyData: familyData,
+    });
+  }else{
+    await setDoc(docRef, {
+      familyData: familyData,
+    });
+  }
 }
 
   return (
