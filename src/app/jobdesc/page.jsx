@@ -52,12 +52,6 @@ export default function Profile() {
       }
     }
 
-    async function getInputValueFromFirebase(){
-      if(userUid){
-        const docRef = doc(db, "users", userUid);
-        const docSnap = await getDoc(docRef);
-      }
-    }
 
     //handleSubmit
     async function handleSubmit(e){

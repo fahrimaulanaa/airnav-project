@@ -60,52 +60,48 @@ export default function Profile() {
   }
 
   async function getInputValueFromFirebase() {
-    if (userUid) {
-      const userDocRef = doc(db, "users", userUid);
-
-      // Fetch initial data
-      const initialDoc = await getDoc(userDocRef);
-      if (initialDoc.exists()) {
-        const data = initialDoc.data();
-        setName(data.name);
-        setPhone(data.phone);
-        setBirthPlace(data.birthPlace);
-        setInstance(data.instance);
-        setBirthDate(data.birthDate);
-        setPosition(data.position);
-        setWorkStatus(data.workStatus);
-        setAddress(data.address);
-        setWorkPeriod(data.workPeriod);
-        setIdentityNumber(data.identityNumber);
-        setEmployeeNumber(data.employeeNumber);
-        setPreviousWorkplace(data.previousWorkplace);
-        setReligion(data.religion);
+    if(userUid){
+      const docRef = doc(db, "users", userUid);
+      const docSnap = await getDoc(docRef);
+      if(docSnap.exists){
+        const data = docSnap.data();
+        const profileData = data.profileData;
+        const profileDataObj = profileData[0];
+        setName(profileDataObj.name);
+        setPhone(profileDataObj.phone);
+        setBirthPlace(profileDataObj.birthPlace);
+        setInstance(profileDataObj.instance);
+        setBirthDate(profileDataObj.birthDate);
+        setPosition(profileDataObj.position);
+        setWorkStatus(profileDataObj.workStatus);
+        setAddress(profileDataObj.address);
+        setWorkPeriod(profileDataObj.workPeriod);
+        setIdentityNumber(profileDataObj.identityNumber);
+        setEmployeeNumber(profileDataObj.employeeNumber);
+        setPreviousWorkplace(profileDataObj.previousWorkplace);
+        setReligion(profileDataObj.religion);
       }
-
-      // Check if window is defined (client-side) before running client-side code
-      if (typeof window !== "undefined") {
-        // Update state in real-time
-        const unsubscribe = onSnapshot(userDocRef, (doc) => {
-          if (doc.exists()) {
+      if(typeof window !== "undefined"){
+        const unsubscribe = onSnapshot(docRef, (doc) => {
+          if(doc.exists()){
             const data = doc.data();
-            // ... (rest of the code remains the same)
-            setName(data.name);
-            setPhone(data.phone);
-            setBirthPlace(data.birthPlace);
-            setInstance(data.instance);
-            setBirthDate(data.birthDate);
-            setPosition(data.position);
-            setWorkStatus(data.workStatus);
-            setAddress(data.address);
-            setWorkPeriod(data.workPeriod);
-            setIdentityNumber(data.identityNumber);
-            setEmployeeNumber(data.employeeNumber);
-            setPreviousWorkplace(data.previousWorkplace || "");
-            setReligion(data.religion);
+            const profileData = data.profileData;
+            const profileDataObj = profileData[0];
+            setName(profileDataObj.name);
+            setPhone(profileDataObj.phone);
+            setBirthPlace(profileDataObj.birthPlace);
+            setInstance(profileDataObj.instance);
+            setBirthDate(profileDataObj.birthDate);
+            setPosition(profileDataObj.position);
+            setWorkStatus(profileDataObj.workStatus);
+            setAddress(profileDataObj.address);
+            setWorkPeriod(profileDataObj.workPeriod);
+            setIdentityNumber(profileDataObj.identityNumber);
+            setEmployeeNumber(profileDataObj.employeeNumber);
+            setPreviousWorkplace(profileDataObj.previousWorkplace);
+            setReligion(profileDataObj.religion);
           }
         });
-
-        // Return the unsubscribe function to use it when needed (e.g., on component unmount)
         return unsubscribe;
       }
     }
@@ -135,22 +131,33 @@ export default function Profile() {
   async function handleSubmit(e) {
     e.preventDefault();
     const userDocRef = doc(db, "users", userUid);
-    await updateDoc(userDocRef, {
-      name: name,
-      phone: phone,
-      birthPlace: birthPlace,
-      instance: instance,
-      birthDate: birthDate,
-      position: position,
-      workStatus: workStatus,
-      address: address,
-      workPeriod: workPeriod,
-      identityNumber: identityNumber,
-      employeeNumber: employeeNumber,
-      previousWorkplace: previousWorkplace,
-      religion: religion,
-    });
-    alert("Data berhasil disimpan");
+    const docSnap = await getDoc(userDocRef);
+    const profileData = [
+      {
+        name: name,
+        phone: phone,
+        birthPlace: birthPlace,
+        instance: instance,
+        birthDate: birthDate,
+        position: position,
+        workStatus: workStatus,
+        address: address,
+        workPeriod: workPeriod,
+        identityNumber: identityNumber,
+        employeeNumber: employeeNumber,
+        previousWorkplace: previousWorkplace,
+        religion: religion,
+      },
+    ];
+    if(docSnap.exists()){
+      await updateDoc(userDocRef,{
+        profileData : profileData
+      })
+    }else{
+      await setDoc(userDocRef, {
+        profileData : profileData
+      })
+    }
   }
 
   return (
