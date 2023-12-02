@@ -45,34 +45,43 @@ export default function Profile() {
     }
   }
 
-  function setDisplayName() {
-    if (typeof window !== 'undefined') {
-      const name = localStorage.getItem("userInfo");
-  
-      if (name) {
-        const nameObj = JSON.parse(name);
-        const fullName = nameObj.nama;
-  
-        // Split the full name into an array of words
-        const words = fullName.split(" ");
-  
-        // Take the first two words
-        const firstTwoWords = words.slice(0, 2).join(" ");
-  
-        // Get the element by ID
-        const nameDisplay = document.getElementById("displayName");
-  
-        if (nameDisplay) {
-          // Set the innerHTML to the first two words
-          nameDisplay.innerHTML = firstTwoWords;
-        } else {
-          console.error("Element with ID 'displayName' not found");
-        }
+  async function setDisplayName() {
+    if(userUid){
+      const docRef = doc(db, "users", userUid);
+      const docSnap = await getDoc(docRef);
+      if(docSnap.exists()){
+        const data = docSnap.data();
+        const displayName = data.profileData
+        const displayNameObj = displayName[0];
+        const displayedName = displayNameObj.name;
+        document.getElementById("displayName").innerHTML = displayedName;
+      }
+      if(typeof window !== "undefined"){
+        const unsubscribe = onSnapshot(docRef, (doc) => {
+          if(doc.exists()){
+            const data = doc.data();
+            const displayName = data.profileData
+            const displayNameObj = displayName[0];
+            const displayedName = displayNameObj.name;
+            document.getElementById("displayName").innerHTML = displayedName;
+          }
+        });
+        return unsubscribe;
       }
     }
   }
-  
-  setDisplayName();
+
+  useEffect(() => {
+    let unsubscribe;
+
+    try{
+      unsubscribe = setDisplayName();
+    }catch(error){
+      console.error("Error setting up subscription:", error);
+    }
+}, []);
+
+
   
   
   
