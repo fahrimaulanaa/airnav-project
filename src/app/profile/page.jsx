@@ -52,7 +52,7 @@ export default function Profile() {
       const docSnap = await getDoc(docRef);
   
       if (docSnap.exists()) {
-        const data = docSnap.data();
+        const data = onSnapshot(docRef);
         const displayName = data.profileData;
         const displayNameObj = displayName[0];
         const fullName = displayNameObj.name;
