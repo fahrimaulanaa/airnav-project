@@ -52,22 +52,26 @@ export default function Profile() {
       const docSnap = await getDoc(docRef);
   
       if (docSnap.exists()) {
-        const data = onSnapshot(docRef);
-        const displayName = data.profileData;
-        const displayNameObj = displayName[0];
-        const fullName = displayNameObj.name;
+        const data =  onSnapshot(docRef, (doc) => {
+          if (doc.exists()) {
+            const data = doc.data();
+            const displayName = data.profileData;
+            const displayNameObj = displayName[0];
+            const fullName = displayNameObj.name;
   
-        // Split the full name into an array of words
-        const words = fullName.split(" ");
+            // Split the full name into an array of words
+            const words = fullName.split(" ");
   
-        // Take the first two words
-        const firstTwoWords = words.slice(0, 2);
+            // Take the first two words
+            const firstTwoWords = words.slice(0, 2);
   
-        // Join the first two words into a single string
-        const displayedName = firstTwoWords.join(" ");
+            // Join the first two words into a single string
+            const displayedName = firstTwoWords.join(" ");
   
-        // Set the innerHTML to the displayed name
-        document.getElementById("displayName").innerHTML = displayedName;
+            // Set the innerHTML to the displayed name
+            document.getElementById("displayName").innerHTML = displayedName;
+          }
+        });
       }
   
       if (typeof window !== "undefined") {
