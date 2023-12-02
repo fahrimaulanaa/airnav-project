@@ -33,17 +33,19 @@ export default function Profile() {
   const [previousWorkplace, setPreviousWorkplace] = useState("");
   const [religion, setReligion] = useState("");
 
-  // check login
-  function checkLogin() {
-    // Check if window is defined (client-side) before accessing document or window
-    if (typeof window !== "undefined") {
-      const loginStatus = localStorage.getItem("loginStatus");
-      if (loginStatus != "true") {
-        window.location.href = "/login";
-      } else {
-      }
+// check login
+function checkLogin() {
+  // Check if window is defined (client-side) before accessing document or window
+  if (typeof window !== "undefined") {
+    const loginStatus = localStorage.getItem("loginStatus");
+    if (loginStatus !== "true") {
+      window.location.href = "/login";
+    } else {
+      // Continue with your logic
     }
   }
+}
+
 
   async function setDisplayName() {
     if(userUid){
