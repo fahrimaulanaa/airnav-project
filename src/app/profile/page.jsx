@@ -47,26 +47,28 @@ export default function Profile() {
 
   function setDisplayName() {
     const name = localStorage.getItem("userInfo");
-    if (name) {
+  
+    if (name && typeof window !== 'undefined') {
       const nameObj = JSON.parse(name);
       const fullName = nameObj.nama;
   
+      // Split the full name into an array of words
       const words = fullName.split(" ");
+  
+      // Take the first two words
       const firstTwoWords = words.slice(0, 2).join(" ");
+  
+      // Get the element by ID
       const nameDisplay = document.getElementById("displayName");
   
       if (nameDisplay) {
+        // Set the innerHTML to the first two words
         nameDisplay.innerHTML = firstTwoWords;
       } else {
         console.error("Element with ID 'displayName' not found");
       }
     }
-  }
-  
-  // Call the function when the DOM is fully loaded
-  document.addEventListener("DOMContentLoaded", function () {
-    setDisplayName();
-  });
+  };
   setDisplayName();
   
   
