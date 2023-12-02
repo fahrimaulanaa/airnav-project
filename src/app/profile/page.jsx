@@ -50,53 +50,63 @@ export default function Profile() {
     if (userUid) {
       const docRef = doc(db, "users", userUid);
       const docSnap = await getDoc(docRef);
+  
       if (docSnap.exists()) {
         const data = docSnap.data();
         const displayName = data.profileData;
         const displayNameObj = displayName[0];
-        const displayedName = displayNameObj.name;
-
-        //take only two words
-        const words = displayedName.split(" ");
-        const firstWord = words[0];
-        const secondWord = words[1];
-        const firstLetter = firstWord.charAt(0);
-        const secondLetter = secondWord.charAt(0);
-        const initials = firstLetter + secondLetter;
-        document.getElementById("displayName").innerHTML = initials;
+        const fullName = displayNameObj.name;
+  
+        // Split the full name into an array of words
+        const words = fullName.split(" ");
+  
+        // Take the first two words
+        const firstTwoWords = words.slice(0, 2);
+  
+        // Join the first two words into a single string
+        const displayedName = firstTwoWords.join(" ");
+  
+        // Set the innerHTML to the displayed name
+        document.getElementById("displayName").innerHTML = displayedName;
       }
+  
       if (typeof window !== "undefined") {
         const unsubscribe = onSnapshot(docRef, (doc) => {
           if (doc.exists()) {
             const data = doc.data();
             const displayName = data.profileData;
             const displayNameObj = displayName[0];
-            const displayedName = displayNameObj.name;
-
-            //take only two words
-            const words = displayedName.split(" ");
-            const firstWord = words[0];
-            const secondWord = words[1];
-            const firstLetter = firstWord.charAt(0);
-            const secondLetter = secondWord.charAt(0);
-            const initials = firstLetter + secondLetter;
-            document.getElementById("displayName").innerHTML = initials;
+            const fullName = displayNameObj.name;
+  
+            // Split the full name into an array of words
+            const words = fullName.split(" ");
+  
+            // Take the first two words
+            const firstTwoWords = words.slice(0, 2);
+  
+            // Join the first two words into a single string
+            const displayedName = firstTwoWords.join(" ");
+  
+            // Set the innerHTML to the displayed name
+            document.getElementById("displayName").innerHTML = displayedName;
           }
         });
+  
         return unsubscribe;
       }
     }
   }
-
+  
   useEffect(() => {
     let unsubscribe;
-
+  
     try {
       unsubscribe = setDisplayName();
     } catch (error) {
       console.error("Error setting up subscription:", error);
     }
   }, []);
+  
 
   // user handler
   let userUid;
@@ -216,10 +226,7 @@ export default function Profile() {
     <main>
       <Navbarx />
       <div className="flex">
-        <div
-          className="sidebar flex flex-col bg-airnav-dark w-70 h-screen"
-          style={{ position: screenLeft }}
-        >
+        <div className="sidebar flex flex-col bg-airnav-dark w-70 h-screen">
           <div className="sidebar-header">
             <div className="sidebar-profile-picture rounded-circle p-6 flex">
               <Image
