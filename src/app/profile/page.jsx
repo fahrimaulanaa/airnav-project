@@ -1,6 +1,5 @@
-// Import yang diperlukan
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useClient } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -33,39 +32,55 @@ export default function Profile() {
   const [previousWorkplace, setPreviousWorkplace] = useState("");
   const [religion, setReligion] = useState("");
 
-// check login
-function checkLogin() {
-  // Check if window is defined (client-side) before accessing document or window
-  if (typeof window !== "undefined") {
-    const loginStatus = localStorage.getItem("loginStatus");
-    if (loginStatus !== "true") {
-      window.location.href = "/login";
-    } else {
-      // Continue with your logic
+  // check login
+  function checkLogin() {
+    // Check if window is defined (client-side) before accessing document or window
+    if (typeof window !== "undefined") {
+      const loginStatus = localStorage.getItem("loginStatus");
+      if (loginStatus !== "true") {
+        window.location.href = "/login";
+      } else {
+        // Continue with your logic
+      }
     }
   }
-}
-
+  checkLogin();
 
   async function setDisplayName() {
-    if(userUid){
+    if (userUid) {
       const docRef = doc(db, "users", userUid);
       const docSnap = await getDoc(docRef);
-      if(docSnap.exists()){
+      if (docSnap.exists()) {
         const data = docSnap.data();
-        const displayName = data.profileData
+        const displayName = data.profileData;
         const displayNameObj = displayName[0];
         const displayedName = displayNameObj.name;
-        document.getElementById("displayName").innerHTML = displayedName;
+
+        //take only two words
+        const words = displayedName.split(" ");
+        const firstWord = words[0];
+        const secondWord = words[1];
+        const firstLetter = firstWord.charAt(0);
+        const secondLetter = secondWord.charAt(0);
+        const initials = firstLetter + secondLetter;
+        document.getElementById("displayName").innerHTML = initials;
       }
-      if(typeof window !== "undefined"){
+      if (typeof window !== "undefined") {
         const unsubscribe = onSnapshot(docRef, (doc) => {
-          if(doc.exists()){
+          if (doc.exists()) {
             const data = doc.data();
-            const displayName = data.profileData
+            const displayName = data.profileData;
             const displayNameObj = displayName[0];
             const displayedName = displayNameObj.name;
-            document.getElementById("displayName").innerHTML = displayedName;
+
+            //take only two words
+            const words = displayedName.split(" ");
+            const firstWord = words[0];
+            const secondWord = words[1];
+            const firstLetter = firstWord.charAt(0);
+            const secondLetter = secondWord.charAt(0);
+            const initials = firstLetter + secondLetter;
+            document.getElementById("displayName").innerHTML = initials;
           }
         });
         return unsubscribe;
@@ -76,20 +91,12 @@ function checkLogin() {
   useEffect(() => {
     let unsubscribe;
 
-    try{
+    try {
       unsubscribe = setDisplayName();
-    }catch(error){
+    } catch (error) {
       console.error("Error setting up subscription:", error);
     }
-}, []);
-
-
-  
-  
-  
-  
-
-  checkLogin();
+  }, []);
 
   // user handler
   let userUid;
@@ -104,10 +111,10 @@ function checkLogin() {
   }
 
   async function getInputValueFromFirebase() {
-    if(userUid){
+    if (userUid) {
       const docRef = doc(db, "users", userUid);
       const docSnap = await getDoc(docRef);
-      if(docSnap.exists){
+      if (docSnap.exists) {
         const data = docSnap.data();
         const profileData = data.profileData;
         const profileDataObj = profileData[0];
@@ -125,9 +132,9 @@ function checkLogin() {
         setPreviousWorkplace(profileDataObj.previousWorkplace);
         setReligion(profileDataObj.religion);
       }
-      if(typeof window !== "undefined"){
+      if (typeof window !== "undefined") {
         const unsubscribe = onSnapshot(docRef, (doc) => {
-          if(doc.exists()){
+          if (doc.exists()) {
             const data = doc.data();
             const profileData = data.profileData;
             const profileDataObj = profileData[0];
@@ -193,55 +200,26 @@ function checkLogin() {
         religion: religion,
       },
     ];
-    if(docSnap.exists()){
-      await updateDoc(userDocRef,{
-        profileData : profileData
-      })
-    }else{
+    if (docSnap.exists()) {
+      await updateDoc(userDocRef, {
+        profileData: profileData,
+      });
+    } else {
       await setDoc(userDocRef, {
-        profileData : profileData
-      })
+        profileData: profileData,
+      });
     }
   }
 
-  function saveUserDataToLocalStorage(){
-    const nama = name;
-    const nomorTelefon = phone;
-    const tempatLahir = birthPlace;
-    const namaInstansi = instance;
-    const tanggalLahir = birthDate;
-    const jabatan = position;
-    const statusPekerjaan = workStatus;
-    const alamat = address;
-    const masaKerja = workPeriod;
-    const nomorIdentitas = identityNumber;
-    const nomorIndukPegawai = employeeNumber;
-    const tempatBekerjaSebelumnya = previousWorkplace;
-    const agama = religion;
-    const userData = {
-      nama : nama,
-      nomorTelefon : nomorTelefon,
-      tempatLahir : tempatLahir,
-      namaInstansi : namaInstansi,
-      tanggalLahir : tanggalLahir,
-      jabatan : jabatan,
-      statusPekerjaan : statusPekerjaan,
-      alamat : alamat,
-      masaKerja : masaKerja,
-      nomorIdentitas : nomorIdentitas,
-      nomorIndukPegawai : nomorIndukPegawai,
-      tempatBekerjaSebelumnya : tempatBekerjaSebelumnya,
-      agama : agama
-    }
-    localStorage.setItem("userInfo", JSON.stringify(userData));
-  }
-  saveUserDataToLocalStorage();
 
   return (
     <main>
       <Navbarx />
       <div className="flex">
-        <div className="sidebar flex flex-col bg-airnav-dark w-70 h-screen" style={{position: screenLeft}}>
+        <div
+          className="sidebar flex flex-col bg-airnav-dark w-70 h-screen"
+          style={{ position: screenLeft }}
+        >
           <div className="sidebar-header">
             <div className="sidebar-profile-picture rounded-circle p-6 flex">
               <Image
@@ -252,7 +230,9 @@ function checkLogin() {
                 className="rounded-circle"
               />
               <div className="sidebar-profile-name text-white ml-4 mt-2">
-                <p className="text-lg font-semibold" id="displayName">--Display Name--</p>
+                <p className="text-lg font-semibold" id="displayName">
+                  --Display Name--
+                </p>
                 <p>Teknisi Teknik</p>
               </div>
             </div>
@@ -544,7 +524,7 @@ function checkLogin() {
                   name="religion"
                   value={religion}
                   onChange={(e) => setReligion(e.target.value)}
-                  required 
+                  required
                 />
               </div>
               {/* button simpan */}
@@ -567,4 +547,3 @@ function checkLogin() {
     </main>
   );
 }
-
