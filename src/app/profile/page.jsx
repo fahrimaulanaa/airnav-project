@@ -71,7 +71,10 @@ export default function Profile() {
       }
     }
   }
+  
   setDisplayName();
+  
+  
   
   
 
