@@ -223,7 +223,7 @@ export default function Profile() {
     <main>
       <Navbarx />
       <div className="flex">
-        <div className="sidebar flex flex-col bg-airnav-dark max-w-64 h-screen" style={{position: screenLeft}}>
+        <div className="sidebar flex flex-col bg-airnav-dark w-70 h-screen" style={{position: screenLeft}}>
           <div className="sidebar-header">
             <div className="sidebar-profile-picture rounded-circle p-6 flex">
               <Image
