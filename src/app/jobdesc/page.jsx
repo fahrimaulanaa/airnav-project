@@ -34,6 +34,7 @@ export default function Profile() {
         if (loginStatus != "true") {
           window.location.href = "/login";
         } else {
+          
         }
       }
     }
@@ -90,6 +91,8 @@ export default function Profile() {
           setAirportActivity(airportActivity || "");
           setAirportArea(airportArea || "");
           setAirportFrequency(airportFrequency || "");
+        }else{
+
         }
         if(typeof window !== "undefined"){
           const unsubscribe = onSnapshot(docRef, (doc) => {

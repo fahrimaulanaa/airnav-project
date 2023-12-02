@@ -45,6 +45,32 @@ export default function Profile() {
     }
   }
 
+  function setDisplayName() {
+    const name = localStorage.getItem("userInfo");
+    if (name) {
+      const nameObj = JSON.parse(name);
+      const fullName = nameObj.nama;
+  
+      const words = fullName.split(" ");
+      const firstTwoWords = words.slice(0, 2).join(" ");
+      const nameDisplay = document.getElementById("displayName");
+  
+      if (nameDisplay) {
+        nameDisplay.innerHTML = firstTwoWords;
+      } else {
+        console.error("Element with ID 'displayName' not found");
+      }
+    }
+  }
+  
+  // Call the function when the DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    setDisplayName();
+  });
+  setDisplayName();
+  
+  
+
   checkLogin();
 
   // user handler
@@ -160,11 +186,44 @@ export default function Profile() {
     }
   }
 
+  function saveUserDataToLocalStorage(){
+    const nama = name;
+    const nomorTelefon = phone;
+    const tempatLahir = birthPlace;
+    const namaInstansi = instance;
+    const tanggalLahir = birthDate;
+    const jabatan = position;
+    const statusPekerjaan = workStatus;
+    const alamat = address;
+    const masaKerja = workPeriod;
+    const nomorIdentitas = identityNumber;
+    const nomorIndukPegawai = employeeNumber;
+    const tempatBekerjaSebelumnya = previousWorkplace;
+    const agama = religion;
+    const userData = {
+      nama : nama,
+      nomorTelefon : nomorTelefon,
+      tempatLahir : tempatLahir,
+      namaInstansi : namaInstansi,
+      tanggalLahir : tanggalLahir,
+      jabatan : jabatan,
+      statusPekerjaan : statusPekerjaan,
+      alamat : alamat,
+      masaKerja : masaKerja,
+      nomorIdentitas : nomorIdentitas,
+      nomorIndukPegawai : nomorIndukPegawai,
+      tempatBekerjaSebelumnya : tempatBekerjaSebelumnya,
+      agama : agama
+    }
+    localStorage.setItem("userInfo", JSON.stringify(userData));
+  }
+  saveUserDataToLocalStorage();
+
   return (
     <main>
       <Navbarx />
       <div className="flex">
-        <div className="sidebar flex flex-col bg-airnav-dark max-w-64 h-screen">
+        <div className="sidebar flex flex-col bg-airnav-dark max-w-64 h-screen" style={{position: screenLeft}}>
           <div className="sidebar-header">
             <div className="sidebar-profile-picture rounded-circle p-6 flex">
               <Image
@@ -175,7 +234,7 @@ export default function Profile() {
                 className="rounded-circle"
               />
               <div className="sidebar-profile-name text-white ml-4 mt-2">
-                <p className="text-lg font-semibold">Fahri Maulana</p>
+                <p className="text-lg font-semibold" id="displayName">--Display Name--</p>
                 <p>Teknisi Teknik</p>
               </div>
             </div>

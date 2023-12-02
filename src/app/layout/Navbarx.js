@@ -3,6 +3,14 @@ import Link from "next/link";
 import React from "react";
 
 const Navbarx = () => {
+
+  const logoutUser = async () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("userData");
+    localStorage.setItem("loginStatus", false);
+
+    window.location.href = "/";
+  }
   return (
     <nav
       className="bg-white h-16x  shadow-md items-center justify-center w-screen"
@@ -19,7 +27,7 @@ const Navbarx = () => {
             className="p-4 mr-96 ml-12"
           />    
         </Link>
-        <div className="flex items-center rounded-md shadow-md px-3 ml-96">
+        <div className="flex items-center rounded-md shadow-md px-3 ml-96" onClick={logoutUser}>
           <Image
           src="/ic_logout.png"
           alt="logout Logo"
