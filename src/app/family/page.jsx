@@ -144,11 +144,76 @@ async function handleSubmit(e) {
   }
 }
 
+async function setDisplayName() {
+  if (userUid) {
+    const docRef = doc(db, "users", userUid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data =  onSnapshot(docRef, (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          const displayName = data.profileData;
+          const displayNameObj = displayName[0];
+          const fullName = displayNameObj.name;
+
+          // Split the full name into an array of words
+          const words = fullName.split(" ");
+
+          // Take the first two words
+          const firstTwoWords = words.slice(0, 2);
+
+          // Join the first two words into a single string
+          const displayedName = firstTwoWords.join(" ");
+
+          // Set the innerHTML to the displayed name
+          document.getElementById("displayName").innerHTML = displayedName;
+        }
+      });
+    }
+
+    if (typeof window !== "undefined") {
+      const unsubscribe = onSnapshot(docRef, (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          const displayName = data.profileData;
+          const displayNameObj = displayName[0];
+          const fullName = displayNameObj.name;
+
+          // Split the full name into an array of words
+          const words = fullName.split(" ");
+
+          // Take the first two words
+          const firstTwoWords = words.slice(0, 2);
+
+          // Join the first two words into a single string
+          const displayedName = firstTwoWords.join(" ");
+
+          // Set the innerHTML to the displayed name
+          document.getElementById("displayName").innerHTML = displayedName;
+        }
+      });
+
+      return unsubscribe;
+    }
+  }
+}
+
+useEffect(() => {
+  let unsubscribe;
+
+  try {
+    unsubscribe = setDisplayName();
+  } catch (error) {
+    console.error("Error setting up subscription:", error);
+  }
+}, []);
+
   return (
     <main>
       <Navbarx />
       <div className="flex">
-        <div className="sidebar flex flex-col bg-airnav-dark w-64 h-screen">
+        <div className="sidebar flex flex-col bg-airnav-dark w-70 h-screen">
           <div className="sidebar-header">
             <div className="sidebar-profile-picture rounded-circle p-6 flex">
               <Image
@@ -159,7 +224,7 @@ async function handleSubmit(e) {
                 className="rounded-circle"
               />
               <div className="sidebar-profile-name text-white ml-4 mt-2">
-                <p className="text-lg font-semibold">Fahri Maulana</p>
+                <p className="text-lg font-semibold" id="displayName">Fahri Maulana</p>
                 <p>Teknisi Teknik</p>
               </div>
             </div>

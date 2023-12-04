@@ -1,18 +1,123 @@
 // Import yang diperlukan
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbarx from "../layout/Navbarx";
+import { db } from "../firebaseConfig";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  setDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { Cookie } from "next/font/google";
 
 // Komponen Profile
 const Profile = () => {
+
+  async function setDisplayName() {
+    if (userUid) {
+      const docRef = doc(db, "users", userUid);
+      const docSnap = await getDoc(docRef);
+  
+      if (docSnap.exists()) {
+        const data =  onSnapshot(docRef, (doc) => {
+          if (doc.exists()) {
+            const data = doc.data();
+            const displayName = data.profileData;
+            const displayNameObj = displayName[0];
+            const fullName = displayNameObj.name;
+  
+            // Split the full name into an array of words
+            const words = fullName.split(" ");
+  
+            // Take the first two words
+            const firstTwoWords = words.slice(0, 2);
+  
+            // Join the first two words into a single string
+            const displayedName = firstTwoWords.join(" ");
+  
+            // Set the innerHTML to the displayed name
+            document.getElementById("displayName").innerHTML = displayedName;
+          }
+        });
+      }
+  
+      if (typeof window !== "undefined") {
+        const unsubscribe = onSnapshot(docRef, (doc) => {
+          if (doc.exists()) {
+            const data = doc.data();
+            const displayName = data.profileData;
+            const displayNameObj = displayName[0];
+            const fullName = displayNameObj.name;
+  
+            // Split the full name into an array of words
+            const words = fullName.split(" ");
+  
+            // Take the first two words
+            const firstTwoWords = words.slice(0, 2);
+  
+            // Join the first two words into a single string
+            const displayedName = firstTwoWords.join(" ");
+  
+            // Set the innerHTML to the displayed name
+            document.getElementById("displayName").innerHTML = displayedName;
+          }
+        });
+  
+        return unsubscribe;
+      }
+    }
+  }
+  
+  useEffect(() => {
+    let unsubscribe;
+  
+    try {
+      unsubscribe = setDisplayName();
+    } catch (error) {
+      console.error("Error setting up subscription:", error);
+    }
+  }, []);
+
+      //function check if user is logged in
+      function checkLogin() {
+        // Check if window is defined (client-side) before accessing document or window
+        if (typeof window !== "undefined") {
+          const loginStatus = localStorage.getItem("loginStatus");
+          if (loginStatus != "true") {
+            window.location.href = "/login";
+          } else {
+            
+          }
+        }
+      }
+    
+      checkLogin();
+    
+      // user handler
+      let userUid;
+      if (typeof window !== "undefined") {
+        const user = localStorage.getItem("userData");
+        if (user) {
+          const userObj = JSON.parse(user);
+          userUid = userObj.uid;
+        } else {
+          // Handle the case where user data is not available in localStorage
+        }
+      }
 
   return (
     <main>
       <Navbarx />
     <div className="flex">
-      <div className="sidebar flex flex-col bg-airnav-dark w-64 h-screen">
+      <div className="sidebar flex flex-col bg-airnav-dark w-70 h-screen">
         <div className="sidebar-header">
           <div className="sidebar-profile-picture rounded-circle p-6 flex">
             <Image
@@ -22,7 +127,7 @@ const Profile = () => {
               height={60}
               className="rounded-circle" />
             <div className="sidebar-profile-name text-white ml-4 mt-2">
-              <p className="text-lg font-semibold">Fahri Maulana</p>
+              <p className="text-lg font-semibold" id="displayName">Fahri Maulana</p>
               <p>Teknisi Teknik</p>
             </div>
           </div>
@@ -82,15 +187,17 @@ const Profile = () => {
             </Link>
           </div>
           <Link href="/">
-            <div className="sidebar-subtitle text-white pl-6 py-2 mt-12 flex items-center hover:bg-white hover:bg-opacity-20">
-              <Image
-                src="/logo_airnav.jpg"
-                alt="profile"
-                width={200}
-                height={60}
-                className="mr-4" />
-            </div>
-          </Link>
+              <div className="rounded-md pl-6 mt-12 flex bg-white p-2 w-48 ml-6">
+                <Image
+                  src="/ic_printer.png"
+                  alt="printer logo"
+                  width={20}
+                  height={20}
+                  className="mr-4"
+                />
+                <p className="pt-1">Cetak Dokumen</p>
+              </div>
+            </Link>
         </div>
       </div>
       <div className="main-content flex">
