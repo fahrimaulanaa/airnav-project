@@ -17,9 +17,10 @@ import {
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { Cookie } from "next/font/google";
+import { Input } from "postcss";
 
 // Komponen Profile
-const Profile = () => {
+export default function Profile() {
 
   async function setDisplayName() {
     if (userUid) {
@@ -248,19 +249,82 @@ const Profile = () => {
                 className="mr-4 mt-1" />
             </div>
           </div>
-          <button className="bg-airnav-blue text-white border rounded-md w-96 ml-12 mt-8 p-3 hover:bg-transparent hover:text-AirNav hover:border hover:border-AirNav transition duration-300 ease-out">
-            Simpan Data
-          </button>
+          <div className="flex flex-row ml-12 mt-8">
+  {/* Input for E-KTP */}
+  <div className="flex flex-col">
+    <label htmlFor="eKtpInput" className="text-md font-semibold">
+      E-KTP
+    </label>
+    <input
+      type="file"
+      id="eKtpInput"
+      className="hidden"
+      accept="image/*"
+    />
+    <label
+      htmlFor="eKtpInput"
+      className="cursor-pointer bg-gray-200 p-2 mt-1 rounded">
+      No File Chosen
+    </label>
+  </div>
+  {/* Input for Kartu Pegawai (Depan) */}
+  <div className="flex flex-col ml-32">
+    <label htmlFor="kartuPegawaiDepanInput" className="text-md font-semibold">
+      Kartu Pegawai (Depan)
+    </label>
+    <input
+      type="file"
+      id="kartuPegawaiDepanInput"
+      className="hidden"
+      accept="image/*"
+    />
+    <label
+      htmlFor="kartuPegawaiDepanInput"
+      className="cursor-pointer bg-gray-200 p-2 mt-1 rounded">
+      No File Chosen
+    </label>
+    </div>
+  {/* Input for Kartu Pegawai (Belakang) */}
+  <div className="flex flex-col ml-20">
+    <label htmlFor="kartuPegawaiBelakangInput" className="text-md font-semibold">
+      Kartu Pegawai (Belakang)
+    </label>
+    <input
+      type="file"
+      id="kartuPegawaiBelakangInput"
+      className="hidden"
+      accept="image/*"
+    />
+    <label
+      htmlFor="kartuPegawaiBelakangInput"
+      className="cursor-pointer bg-gray-200 p-2 mt-1 rounded">
+      No File Chosen
+    </label>
+    </div>
+  {/* Input for Pass Photo */}
+  <div className="flex flex-col ml-16 w-48">
+    <label htmlFor="passPhotoInput" className="text-md font-semibold">
+      Pass Photo
+    </label>
+    <input
+      type="file"
+      id="passPhotoInput"
+      className="hidden"
+      accept="image/*"
+    />
+    <label
+      htmlFor="passPhotoInput"
+      className="cursor-pointer bg-gray-200 p-2 mt-1 rounded">
+      No File Chosen
+    </label>
+    </div>
+  </div>
         </form>
-        {/* Isi Konten Utama */}
-        {/* ... */}
       </div>
     </div>
     </main>
   );
 };
-
-export default Profile;
 
 // CSS untuk styling
 <style jsx>{`
