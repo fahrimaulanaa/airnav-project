@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbarx from "../layout/Navbarx";
-import { db } from "../firebaseConfig";
+import { db, storage } from "../firebaseConfig";
 import {
   collection,
   addDoc,
@@ -14,6 +14,7 @@ import {
   getDoc,
   onSnapshot,
 } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { Cookie } from "next/font/google";
 
@@ -235,6 +236,7 @@ export default function Profile() {
             <div className="sidebar-profile-picture rounded-circle p-6 flex">
               <Image
                 src="/ic_user.png"
+                id="profilePicture"
                 alt="profile"
                 width={60}
                 height={60}

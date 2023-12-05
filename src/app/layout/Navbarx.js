@@ -27,7 +27,7 @@ const Navbarx = () => {
             className="p-4 mr-96 ml-12"
           />    
         </Link>
-        <div className="flex items-center rounded-md shadow-md px-3 ml-96" onClick={logoutUser}>
+        <div className="flex items-center rounded-md shadow-md px-3 ml-96 hover:cursor-grab" onClick={logoutUser}>
           <Image
           src="/ic_logout.png"
           alt="logout Logo"

@@ -123,6 +123,7 @@ const Profile = () => {
             <Image
               src="/ic_user.png"
               alt="profile"
+              id="profilePicture"
               width={60}
               height={60}
               className="rounded-circle" />
