@@ -430,7 +430,6 @@ export default function Profile() {
             <div className="flex flex-col">
               <h2 className="text-md font-semibold">E-KTP</h2>
               <Image
-                src={localStorage.getItem("ktpURL") ? localStorage.getItem("ktpURL") : "/placeholder_document.png"}
                 alt="placeholder"
                 width={204}
                 height={275}
@@ -441,7 +440,6 @@ export default function Profile() {
             <div className="flex flex-col ml-8">
               <h2 className="text-md font-semibold">Kartu Pegawai (Depan)</h2>
               <Image
-                src={localStorage.getItem("kartuPegawaiDepanURL") ? localStorage.getItem("kartuPegawaiDepanURL") : "/placeholder_document.png"}
                 alt="placeholder"
                 width={204}
                 height={275}
@@ -452,7 +450,6 @@ export default function Profile() {
             <div className="flex flex-col ml-8">
               <h2 className="text-md font-semibold">Kartu Pegawai (Belakang)</h2>
               <Image
-                src={localStorage.getItem("kartuPegawaiBelakangURL") ? localStorage.getItem("kartuPegawaiBelakangURL") : "/placeholder_document.png"}
                 alt="placeholder"
                 width={204}
                 height={275}
@@ -463,7 +460,6 @@ export default function Profile() {
             <div className="flex flex-col ml-8">
               <h2 className="text-md font-semibold">Pass Photo</h2>
               <Image
-                src={localStorage.getItem("passPhotoURL") ? localStorage.getItem("passPhotoURL") : "/placeholder_document.png"}
                 alt="placeholder"
                 width={204}
                 height={275}
