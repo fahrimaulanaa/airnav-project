@@ -322,10 +322,30 @@ export default function Profile() {
           getDownloadURL(snapshot.ref).then((downloadURL) => {
             console.log('File available at', downloadURL);
             ktpURL = downloadURL;
-            localStorage.setItem("ktpURL", ktpURL);
           });
         });
       } 
+
+      useEffect(() => {
+        localStorage.setItem("ktpURL", ktpURL);
+      }, [ktpURL]);
+
+      useEffect(() => {
+        localStorage.setItem("kartuPegawaiDepanURL", kartuPegawaiDepanURL);
+      }
+      , [kartuPegawaiDepanURL]);
+
+      useEffect(() => {
+        localStorage.setItem("kartuPegawaiBelakangURL", kartuPegawaiBelakangURL);
+      }
+      , [kartuPegawaiBelakangURL]);
+
+      useEffect(() => {
+        localStorage.setItem("passPhotoURL", passPhotoURL);
+      }
+      , [passPhotoURL]);
+
+    
 
   return (
     <main>
