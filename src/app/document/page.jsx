@@ -327,25 +327,19 @@ export default function Profile() {
       } 
 
       useEffect(() => {
-        localStorage.setItem("ktpURL", ktpURL);
-      }, [ktpURL]);
-
-      useEffect(() => {
-        localStorage.setItem("kartuPegawaiDepanURL", kartuPegawaiDepanURL);
+         let unsubscribe;
+          try {
+            // Include setDisplayName in the dependency array
+            unsubscribe = uploadKTP();
+            unsubscribe = uploadKartuPegawaiDepan();
+            unsubscribe = uploadKartuPegawaiBelakang();
+            unsubscribe = uploadPassPhoto();
+          } catch (error) {
+            console.error("Error setting up subscription:", error);
+          }
       }
-      , [kartuPegawaiDepanURL]);
+      , [uploadKTP, uploadKartuPegawaiDepan, uploadKartuPegawaiBelakang, uploadPassPhoto]); // Add setDisplayName to the dependency array
 
-      useEffect(() => {
-        localStorage.setItem("kartuPegawaiBelakangURL", kartuPegawaiBelakangURL);
-      }
-      , [kartuPegawaiBelakangURL]);
-
-      useEffect(() => {
-        localStorage.setItem("passPhotoURL", passPhotoURL);
-      }
-      , [passPhotoURL]);
-
-    
 
   return (
     <main>
