@@ -18,6 +18,8 @@ import {
 import { getAuth } from "firebase/auth";
 import { Cookie } from "next/font/google";
 import { Input } from "postcss";
+import { storage } from "../firebaseConfig";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 // Komponen Profile
 export default function Profile() {
@@ -114,6 +116,63 @@ export default function Profile() {
         }
       }
 
+      var fileItem ;
+      var fileName;
+      const storage = getStorage();
+      var profileUrl;
+      const docRef = doc(db, 'users', userUid);
+
+
+      function  getFile(e){
+        fileItem = e.target.files[0];
+        if(fileItem){
+          fileName = userUid
+          console.log(fileName);
+          uploadKTP();
+        }else{
+          console.log("no file chosen");
+        }
+      }
+
+      //function set imageProfile
+      async function uploadKTP(){
+        const storageRef = ref(storage, 'ktp/' + `${userUid}_ktp`);
+        const uploadTask = uploadBytesResumable(storageRef, fileItem);
+        uploadTask.on('state_changed', 
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          
+        }, 
+        (error) => {
+          // Handle unsuccessful uploads
+        }, 
+        () => {
+          // Handle successful uploads on complete
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            const ktpURL = downloadURL;
+            localStorage.setItem("ktpURL", ktpURL);
+          });
+        }
+      );
+      }
+      
+
+      var profileUrl;
+      function setProfileUrl(){
+        if (typeof window !== "undefined") {
+          const profile = localStorage.getItem("profileUrl");
+          if (profile) {
+            profileUrl = profile;
+          } else {
+            // Handle the case where user data is not available in localStorage
+          }
+        }
+      }
+      setProfileUrl();
+      
+
   return (
     <main>
       <Navbarx />
@@ -122,7 +181,7 @@ export default function Profile() {
         <div className="sidebar-header">
           <div className="sidebar-profile-picture rounded-circle p-6 flex">
             <Image
-              src="/ic_user.png"
+              src={profileUrl}
               alt="profile"
               id="profilePicture"
               width={60}
@@ -219,7 +278,9 @@ export default function Profile() {
                 alt="placeholder"
                 width={204}
                 height={275}
-                className="mr-4 mt-1" />
+                className="mr-4 mt-1"
+                
+                />
             </div>
             <div className="flex flex-col ml-8">
               <h2 className="text-md font-semibold">Kartu Pegawai (Depan)</h2>
@@ -260,6 +321,7 @@ export default function Profile() {
       id="eKtpInput"
       className="hidden"
       accept="image/*"
+      onChange={getFile}
     />
     <label
       htmlFor="eKtpInput"
