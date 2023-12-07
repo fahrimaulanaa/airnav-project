@@ -81,13 +81,15 @@ export default function Profile() {
   
   useEffect(() => {
     let unsubscribe;
-  
+
     try {
-      unsubscribe = setDisplayName();
+        // Include setDisplayName in the dependency array
+        unsubscribe = setDisplayName();
     } catch (error) {
-      console.error("Error setting up subscription:", error);
+        console.error("Error setting up subscription:", error);
     }
-  }, []);
+}, [setDisplayName]); // Add setDisplayName to the dependency array
+
 
       //function check if user is logged in
       function checkLogin() {
