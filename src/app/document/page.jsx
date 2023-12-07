@@ -259,7 +259,7 @@ export default function Profile() {
       E-KTP
     </label>
     <input
-      onChange={getFile}
+      // onChange={getFile}
       type="file"
       id="eKtpInput"
       className="hidden"
