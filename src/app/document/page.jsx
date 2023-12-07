@@ -124,7 +124,6 @@ export default function Profile() {
         <div className="sidebar-header">
           <div className="sidebar-profile-picture rounded-circle p-6 flex">
             <Image
-              src={profileUrl}
               alt="profile"
               id="profilePicture"
               width={60}
