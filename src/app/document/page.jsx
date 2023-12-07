@@ -18,7 +18,6 @@ import {
 import { getAuth } from "firebase/auth";
 import { Cookie } from "next/font/google";
 import { Input } from "postcss";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Komponen Profile
 export default function Profile() {
@@ -80,13 +79,15 @@ export default function Profile() {
   
   useEffect(() => {
     let unsubscribe;
-  
+
     try {
-      unsubscribe = setDisplayName();
+        // Include setDisplayName in the dependency array
+        unsubscribe = setDisplayName();
     } catch (error) {
-      console.error("Error setting up subscription:", error);
+        console.error("Error setting up subscription:", error);
     }
-  }, []);
+}, [setDisplayName]); // Add setDisplayName to the dependency array
+
 
       //function check if user is logged in
       function checkLogin() {
@@ -115,48 +116,6 @@ export default function Profile() {
         }
       }
 
-      var fileNames;
-      function getFile(event) {
-        fileNames = event.target.files[0].name;
-        console.log(fileNames);
-        uploadKtp(event.target.files[0]);
-      }
-
-      async function uploadKtp(file) {
-        const storage = getStorage();
-        const storageRef = ref(storage, "userDoc/" + `${userUid}` + "/ktp/" + `${userUid}_ktp`);
-        const uploadTask = uploadBytes(storageRef, file);
-
-        uploadTask.then((snapshot) => {
-          console.log("Upload complete");
-      
-          // Get the download URL
-          getDownloadURL(snapshot.ref).then((downloadURL) => {
-            console.log("File available at", downloadURL);
-          });
-        });
-      
-        // Use 'catch' to handle errors during the upload
-        uploadTask.catch((error) => {
-          console.error("Error during upload:", error);
-        });
-      
-        // Use 'on' to track the upload progress
-        uploadTask.on("state_changed", (snapshot) => {
-          // Handle progress, pause, and resume events
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ${progress}% done`);
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
-        });
-      }
-
   return (
     <main>
       <Navbarx />
@@ -165,7 +124,7 @@ export default function Profile() {
         <div className="sidebar-header">
           <div className="sidebar-profile-picture rounded-circle p-6 flex">
             <Image
-              src="/ic_user.png"
+              src={profileUrl}
               alt="profile"
               id="profilePicture"
               width={60}
@@ -262,7 +221,9 @@ export default function Profile() {
                 alt="placeholder"
                 width={204}
                 height={275}
-                className="mr-4 mt-1" />
+                className="mr-4 mt-1"
+                
+                />
             </div>
             <div className="flex flex-col ml-8">
               <h2 className="text-md font-semibold">Kartu Pegawai (Depan)</h2>
@@ -304,6 +265,7 @@ export default function Profile() {
       id="eKtpInput"
       className="hidden"
       accept="image/*"
+      onChange={getFile}
     />
     <label
       htmlFor="eKtpInput"
