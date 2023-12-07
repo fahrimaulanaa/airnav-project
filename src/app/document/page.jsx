@@ -265,7 +265,6 @@ export default function Profile() {
       id="eKtpInput"
       className="hidden"
       accept="image/*"
-      onChange={getFile}
     />
     <label
       htmlFor="eKtpInput"
