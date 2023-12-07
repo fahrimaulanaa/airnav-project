@@ -18,6 +18,7 @@ import {
 import { getAuth } from "firebase/auth";
 import { Cookie } from "next/font/google";
 import { Input } from "postcss";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Komponen Profile
 export default function Profile() {
@@ -112,6 +113,48 @@ export default function Profile() {
         } else {
           // Handle the case where user data is not available in localStorage
         }
+      }
+
+      var fileNames;
+      function getFile(event) {
+        fileNames = event.target.files[0].name;
+        console.log(fileNames);
+        uploadKtp(event.target.files[0]);
+      }
+
+      async function uploadKtp(file) {
+        const storage = getStorage();
+        const storageRef = ref(storage, "userDoc/" + `${userUid}` + "/ktp/" + `${userUid}_ktp`);
+        const uploadTask = uploadBytes(storageRef, file);
+
+        uploadTask.then((snapshot) => {
+          console.log("Upload complete");
+      
+          // Get the download URL
+          getDownloadURL(snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+          });
+        });
+      
+        // Use 'catch' to handle errors during the upload
+        uploadTask.catch((error) => {
+          console.error("Error during upload:", error);
+        });
+      
+        // Use 'on' to track the upload progress
+        uploadTask.on("state_changed", (snapshot) => {
+          // Handle progress, pause, and resume events
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        });
       }
 
   return (
@@ -256,6 +299,7 @@ export default function Profile() {
       E-KTP
     </label>
     <input
+      onChange={getFile}
       type="file"
       id="eKtpInput"
       className="hidden"
