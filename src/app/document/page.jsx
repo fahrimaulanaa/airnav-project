@@ -116,6 +116,12 @@ export default function Profile() {
         }
       }
 
+      var fileName;
+      function getFile(event){
+        fileName = event.target.files[0].name;
+        console.log(fileName);
+      }
+
   return (
     <main>
       <Navbarx />
@@ -221,7 +227,6 @@ export default function Profile() {
                 width={204}
                 height={275}
                 className="mr-4 mt-1"
-                
                 />
             </div>
             <div className="flex flex-col ml-8">
@@ -259,7 +264,7 @@ export default function Profile() {
       E-KTP
     </label>
     <input
-      // onChange={getFile}
+      onChange={getFile}
       type="file"
       id="eKtpInput"
       className="hidden"
