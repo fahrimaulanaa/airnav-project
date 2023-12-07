@@ -189,7 +189,6 @@ export default function Profile() {
           getDownloadURL(snapshot.ref).then((downloadURL) => {
             console.log('File available at', downloadURL);
             passPhotoURL = downloadURL;
-            localStorage.setItem("passPhotoURL", passPhotoURL);
           });
         });
       }
@@ -233,7 +232,7 @@ export default function Profile() {
           getDownloadURL(snapshot.ref).then((downloadURL) => {
             console.log('File available at', downloadURL);
             kartuPegawaiBelakangURL = downloadURL;
-            localStorage.setItem("kartuPegawaiBelakangURL", kartuPegawaiBelakangURL);
+
           });
         });
       }
@@ -278,7 +277,6 @@ export default function Profile() {
           getDownloadURL(snapshot.ref).then((downloadURL) => {
             console.log('File available at', downloadURL);
             kartuPegawaiDepanURL = downloadURL;
-            localStorage.setItem("kartuPegawaiDepanURL", kartuPegawaiDepanURL);
           });
         });
       }
@@ -289,7 +287,8 @@ export default function Profile() {
         const storageRef = ref(storage, 'userDoc/' + 'ktp/' + newFileName);
         const uploadTask = uploadBytesResumable(storageRef, file);
         console.log('uploading...');
-      
+
+
         uploadTask.on(
           'state_changed',
           (snapshot) => {
@@ -324,21 +323,8 @@ export default function Profile() {
             ktpURL = downloadURL;
           });
         });
-      } 
-
-      useEffect(() => {
-         let unsubscribe;
-          try {
-            // Include setDisplayName in the dependency array
-            unsubscribe = uploadKTP();
-            unsubscribe = uploadKartuPegawaiDepan();
-            unsubscribe = uploadKartuPegawaiBelakang();
-            unsubscribe = uploadPassPhoto();
-          } catch (error) {
-            console.error("Error setting up subscription:", error);
-          }
       }
-      , [uploadKTP, uploadKartuPegawaiDepan, uploadKartuPegawaiBelakang, uploadPassPhoto]); // Add setDisplayName to the dependency array
+
 
 
   return (
@@ -349,7 +335,7 @@ export default function Profile() {
         <div className="sidebar-header">
           <div className="sidebar-profile-picture rounded-circle p-6 flex">
             <Image
-            src={localStorage.getItem("passPhotoURL") ? localStorage.getItem("passPhotoURL") : "/placeholder_profile.png"}
+              src="/profile_picture.png"
               alt="profile"
               id="profilePicture"
               width={60}
