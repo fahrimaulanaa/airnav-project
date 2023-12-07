@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "aws4": "^1.11.0",
+    "browser-image-compression": "^2.0.2",
     "firebase": "^10.7.0",
     "firebase-admin": "^11.11.1",
     "next": "14.0.3",

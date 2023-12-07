@@ -18,6 +18,7 @@ import {
 import { getAuth } from "firebase/auth";
 import { Cookie } from "next/font/google";
 import { Input } from "postcss";
+import { getStorage, uploadBytes, uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 
 // Komponen Profile
 export default function Profile() {
@@ -117,10 +118,214 @@ export default function Profile() {
       }
 
       var fileName;
+      var ktpURL;
+      var kartuPegawaiDepanURL;
+      var kartuPegawaiBelakangURL;
+      var passPhotoURL;
+
       function getFile(event){
         fileName = event.target.files[0].name;
         console.log(fileName);
+        uploadKTP(event.target.files[0]);
       }
+
+      var fileNameKartuPegawaiDepan;
+      function getFileKartuPegawaiDepan(event){
+        fileNameKartuPegawaiDepan = event.target.files[0].name;
+        console.log(fileNameKartuPegawaiDepan);
+        uploadKartuPegawaiDepan(event.target.files[0]);
+      }
+
+      var fileNameKartuPegawaiBelakang;
+      function getFileKartuPegawaiBelakang(event){
+        fileNameKartuPegawaiBelakang = event.target.files[0].name;
+        console.log(fileNameKartuPegawaiBelakang);
+        uploadKartuPegawaiBelakang(event.target.files[0]);
+      }
+
+      var fileNamePassPhoto;
+      function getFilePassPhoto(event){
+        fileNamePassPhoto = event.target.files[0].name;
+        console.log(fileNamePassPhoto);
+        uploadPassPhoto(event.target.files[0]);
+      }
+
+      async function uploadPassPhoto(file) {
+        const storage = getStorage();
+        const newFileName = `${userUid}.jpg`; // Change the file name as needed
+        const storageRef = ref(storage, 'userDoc/' + 'passPhoto/' + newFileName);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        console.log('uploading...');
+
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
+            }
+          },
+          (error) => {
+            // Handle unsuccessful uploads
+            console.error('Error during upload:', error);
+          },
+          () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            console.log('Upload complete');
+          }
+        );
+
+        uploadTask.then((snapshot) => {
+          console.log('Uploaded a blob or file!');
+          getDownloadURL(snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            passPhotoURL = downloadURL;
+            localStorage.setItem("passPhotoURL", passPhotoURL);
+          });
+        });
+      }
+
+      async function uploadKartuPegawaiBelakang(file) {
+        const storage = getStorage();
+        const newFileName = `${userUid}.jpg`; // Change the file name as needed
+        const storageRef = ref(storage, 'userDoc/' + 'kartuPegawaiBelakang/' + newFileName);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        console.log('uploading...');
+
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
+            }
+          },
+          (error) => {
+            // Handle unsuccessful uploads
+            console.error('Error during upload:', error);
+          },
+          () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            console.log('Upload complete');
+          }
+        );
+
+        uploadTask.then((snapshot) => {
+          console.log('Uploaded a blob or file!');
+          getDownloadURL(snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            kartuPegawaiBelakangURL = downloadURL;
+            localStorage.setItem("kartuPegawaiBelakangURL", kartuPegawaiBelakangURL);
+          });
+        });
+      }
+
+
+      async function uploadKartuPegawaiDepan(file) {
+        const storage = getStorage();
+        const newFileName = `${userUid}.jpg`; // Change the file name as needed
+        const storageRef = ref(storage, 'userDoc/' + 'kartuPegawaiDepan/' + newFileName);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        console.log('uploading...');
+
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
+            }
+          },
+          (error) => {
+            // Handle unsuccessful uploads
+            console.error('Error during upload:', error);
+          },
+          () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            console.log('Upload complete');
+          }
+        );
+
+        uploadTask.then((snapshot) => {
+          console.log('Uploaded a blob or file!');
+          getDownloadURL(snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            kartuPegawaiDepanURL = downloadURL;
+            localStorage.setItem("kartuPegawaiDepanURL", kartuPegawaiDepanURL);
+          });
+        });
+      }
+
+      async function uploadKTP(file) {
+        const storage = getStorage();
+        const newFileName = `${userUid}.jpg`; // Change the file name as needed
+        const storageRef = ref(storage, 'userDoc/' + 'ktp/' + newFileName);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        console.log('uploading...');
+      
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
+            }
+          },
+          (error) => {
+            // Handle unsuccessful uploads
+            console.error('Error during upload:', error);
+          },
+          () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            console.log('Upload complete');
+          }
+        );
+
+        uploadTask.then((snapshot) => {
+          console.log('Uploaded a blob or file!');
+          getDownloadURL(snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            ktpURL = downloadURL;
+            localStorage.setItem("ktpURL", ktpURL);
+          });
+        });
+      } 
 
   return (
     <main>
@@ -130,11 +335,14 @@ export default function Profile() {
         <div className="sidebar-header">
           <div className="sidebar-profile-picture rounded-circle p-6 flex">
             <Image
+            src={localStorage.getItem("passPhotoURL") ? localStorage.getItem("passPhotoURL") : "/placeholder_profile.png"}
               alt="profile"
               id="profilePicture"
               width={60}
               height={60}
-              className="rounded-circle" />
+              className="mr-4 mt-1 rounded-full overflow-hidden"
+              style={{ objectFit: "cover", objectPosition: "centerCrop", width: "80px", height: "80px" }}              
+               />
             <div className="sidebar-profile-name text-white ml-4 mt-2">
               <p className="text-lg font-semibold" id="displayName">Fahri Maulana</p>
               <p>Teknisi Teknik</p>
@@ -222,39 +430,46 @@ export default function Profile() {
             <div className="flex flex-col">
               <h2 className="text-md font-semibold">E-KTP</h2>
               <Image
-                src="/placeholder_document.png"
+                src={localStorage.getItem("ktpURL") ? localStorage.getItem("ktpURL") : "/placeholder_document.png"}
                 alt="placeholder"
                 width={204}
                 height={275}
                 className="mr-4 mt-1"
+                style={{ objectFit: "cover", objectPosition: "centerCrop", width: "204px", height: "275px" }}
                 />
             </div>
             <div className="flex flex-col ml-8">
               <h2 className="text-md font-semibold">Kartu Pegawai (Depan)</h2>
               <Image
-                src="/placeholder_document.png"
+                src={localStorage.getItem("kartuPegawaiDepanURL") ? localStorage.getItem("kartuPegawaiDepanURL") : "/placeholder_document.png"}
                 alt="placeholder"
                 width={204}
                 height={275}
-                className="mr-4 mt-1" />
+                className="mr-4 mt-1" 
+                style={{ objectFit: "cover", objectPosition: "centerCrop", width: "204px", height: "275px" }}
+                />
             </div>
             <div className="flex flex-col ml-8">
               <h2 className="text-md font-semibold">Kartu Pegawai (Belakang)</h2>
               <Image
-                src="/placeholder_document.png"
+                src={localStorage.getItem("kartuPegawaiBelakangURL") ? localStorage.getItem("kartuPegawaiBelakangURL") : "/placeholder_document.png"}
                 alt="placeholder"
                 width={204}
                 height={275}
-                className="mr-4 mt-1" />
+                className="mr-4 mt-1" 
+                style={{ objectFit: "cover", objectPosition: "centerCrop", width: "204px", height: "275px" }}
+                />
             </div>
             <div className="flex flex-col ml-8">
               <h2 className="text-md font-semibold">Pass Photo</h2>
               <Image
-                src="/placeholder_document.png"
+                src={localStorage.getItem("passPhotoURL") ? localStorage.getItem("passPhotoURL") : "/placeholder_document.png"}
                 alt="placeholder"
                 width={204}
                 height={275}
-                className="mr-4 mt-1" />
+                className="mr-4 mt-1" 
+                style={{ objectFit: "cover", objectPosition: "centerCrop", width: "204px", height: "275px" }}
+                />
             </div>
           </div>
           <div className="flex flex-row ml-12 mt-8">
@@ -286,6 +501,7 @@ export default function Profile() {
       id="kartuPegawaiDepanInput"
       className="hidden"
       accept="image/*"
+      onChange={getFileKartuPegawaiDepan}
     />
     <label
       htmlFor="kartuPegawaiDepanInput"
@@ -303,6 +519,7 @@ export default function Profile() {
       id="kartuPegawaiBelakangInput"
       className="hidden"
       accept="image/*"
+      onChange={getFileKartuPegawaiBelakang}
     />
     <label
       htmlFor="kartuPegawaiBelakangInput"
@@ -320,6 +537,7 @@ export default function Profile() {
       id="passPhotoInput"
       className="hidden"
       accept="image/*"
+      onChange={getFilePassPhoto}
     />
     <label
       htmlFor="passPhotoInput"
