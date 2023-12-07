@@ -325,8 +325,28 @@ export default function Profile() {
         });
       }
 
+      const getImageUrl = async () => {
+        const storage = getStorage();
+        const ktpRef = ref(storage, 'userDoc/' + 'ktp/' + userUid + '.jpg');
+        const kartuPegawaiDepanRef = ref(storage, 'userDoc/' + 'kartuPegawaiDepan/' + userUid + '.jpg');
+        const kartuPegawaiBelakangRef = ref(storage, 'userDoc/' + 'kartuPegawaiBelakang/' + userUid + '.jpg');
+        const passPhotoRef = ref(storage, 'userDoc/' + 'passPhoto/' + userUid + '.jpg');
 
+        const ktpUrl = await getDownloadURL(ktpRef);
+        const kartuPegawaiDepanUrl = await getDownloadURL(kartuPegawaiDepanRef);
+        const kartuPegawaiBelakangUrl = await getDownloadURL(kartuPegawaiBelakangRef);
+        const passPhotoUrl = await getDownloadURL(passPhotoRef);
 
+        document.getElementById("profilePicture").src = passPhotoUrl;
+        document.getElementById("eKtpImage").src = ktpUrl;
+        document.getElementById("kartuPegawaiDepanImage").src = kartuPegawaiDepanUrl;
+        document.getElementById("kartuPegawaiBelakangImage").src = kartuPegawaiBelakangUrl;
+        document.getElementById("passPhotoImage").src = passPhotoUrl;
+        
+
+    }
+
+      getImageUrl();
   return (
     <main>
       <Navbarx />
@@ -335,7 +355,6 @@ export default function Profile() {
         <div className="sidebar-header">
           <div className="sidebar-profile-picture rounded-circle p-6 flex">
             <Image
-              src="/profile_picture.png"
               alt="profile"
               id="profilePicture"
               width={60}
@@ -434,6 +453,7 @@ export default function Profile() {
                 width={204}
                 height={275}
                 className="mr-4 mt-1"
+                id="eKtpImage"
                 style={{ objectFit: "cover", objectPosition: "centerCrop", width: "204px", height: "275px" }}
                 />
             </div>
@@ -444,6 +464,7 @@ export default function Profile() {
                 width={204}
                 height={275}
                 className="mr-4 mt-1" 
+                id="kartuPegawaiDepanImage"
                 style={{ objectFit: "cover", objectPosition: "centerCrop", width: "204px", height: "275px" }}
                 />
             </div>
@@ -454,6 +475,7 @@ export default function Profile() {
                 width={204}
                 height={275}
                 className="mr-4 mt-1" 
+                id="kartuPegawaiBelakangImage"
                 style={{ objectFit: "cover", objectPosition: "centerCrop", width: "204px", height: "275px" }}
                 />
             </div>
@@ -464,6 +486,7 @@ export default function Profile() {
                 width={204}
                 height={275}
                 className="mr-4 mt-1" 
+                id="passPhotoImage"
                 style={{ objectFit: "cover", objectPosition: "centerCrop", width: "204px", height: "275px" }}
                 />
             </div>
